@@ -1,359 +1,109 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { StepIndicator } from "@/components/DocHubComponents";
 import { Header } from "@/components/Layout";
-import { ArrowRight, ArrowLeft, Eye, EyeOff, CheckCircle2 } from "lucide-react";
-
-const steps = [
-  { label: "Dados Pessoais", description: "Informações básicas" },
-  { label: "Profissional", description: "CRM e especialidade" },
-  { label: "Senha", description: "Segurança da conta" },
-  { label: "Consentimentos", description: "Termos e privacidade" },
-];
-
-interface FormData {
-  nome: string;
-  email: string;
-  telefone: string;
-  crm: string;
-  uf: string;
-  especialidade: string;
-  senha: string;
-  confirmarSenha: string;
-  termos: boolean;
-  privacidade: boolean;
-  marketing: boolean;
-}
+import { useApp } from "@/context/AppContext";
+import { brazilianStates, medicalSpecialties, ageRanges } from "@/data/marketData";
+import { ArrowRight, Shield } from "lucide-react";
 
 export default function CadastroPage() {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(0);
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
-    nome: "",
-    email: "",
-    telefone: "",
-    crm: "",
-    uf: "",
-    especialidade: "",
-    senha: "",
-    confirmarSenha: "",
-    termos: false,
-    privacidade: false,
-    marketing: false,
+  const { setUser, setTestType } = useApp();
+  const [form, setForm] = useState({
+    name: '', email: '', specialty: '', city: '', state: '', ageRange: '',
   });
 
-  const handleChange = (field: keyof FormData, value: string | boolean) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  const isValid = form.name && form.email && form.specialty && form.state && form.ageRange;
 
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep((prev) => prev + 1);
+  const handleSubmit = (type: 'free' | 'complete') => {
+    if (!isValid) return;
+    setUser(form);
+    setTestType(type);
+    if (type === 'complete') {
+      navigate('/paywall');
     } else {
-      // Submit form and redirect to test
-      navigate("/teste");
+      navigate('/teste');
     }
   };
 
-  const handleBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
-
-  const renderStep = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
-          >
-            <div>
-              <Label htmlFor="nome">Nome completo</Label>
-              <Input
-                id="nome"
-                value={formData.nome}
-                onChange={(e) => handleChange("nome", e.target.value)}
-                placeholder="Dr. João da Silva"
-                inputSize="lg"
-                className="mt-1.5"
-              />
-            </div>
-            <div>
-              <Label htmlFor="email">E-mail profissional</Label>
-              <Input
-                id="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) => handleChange("email", e.target.value)}
-                placeholder="joao@clinica.com.br"
-                inputSize="lg"
-                className="mt-1.5"
-              />
-            </div>
-            <div>
-              <Label htmlFor="telefone">Telefone</Label>
-              <Input
-                id="telefone"
-                type="tel"
-                value={formData.telefone}
-                onChange={(e) => handleChange("telefone", e.target.value)}
-                placeholder="(11) 99999-9999"
-                inputSize="lg"
-                className="mt-1.5"
-              />
-            </div>
-          </motion.div>
-        );
-      case 1:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
-          >
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="crm">Número do CRM</Label>
-                <Input
-                  id="crm"
-                  value={formData.crm}
-                  onChange={(e) => handleChange("crm", e.target.value)}
-                  placeholder="123456"
-                  inputSize="lg"
-                  className="mt-1.5"
-                />
-              </div>
-              <div>
-                <Label htmlFor="uf">UF do CRM</Label>
-                <Input
-                  id="uf"
-                  value={formData.uf}
-                  onChange={(e) => handleChange("uf", e.target.value)}
-                  placeholder="SP"
-                  inputSize="lg"
-                  className="mt-1.5"
-                  maxLength={2}
-                />
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="especialidade">Especialidade principal</Label>
-              <Input
-                id="especialidade"
-                value={formData.especialidade}
-                onChange={(e) => handleChange("especialidade", e.target.value)}
-                placeholder="Cardiologia"
-                inputSize="lg"
-                className="mt-1.5"
-              />
-              <p className="mt-1 text-xs text-muted-foreground">
-                Você poderá adicionar outras especialidades depois
-              </p>
-            </div>
-          </motion.div>
-        );
-      case 2:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-4"
-          >
-            <div>
-              <Label htmlFor="senha">Senha</Label>
-              <div className="relative mt-1.5">
-                <Input
-                  id="senha"
-                  type={showPassword ? "text" : "password"}
-                  value={formData.senha}
-                  onChange={(e) => handleChange("senha", e.target.value)}
-                  placeholder="Mínimo 8 caracteres"
-                  inputSize="lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="confirmarSenha">Confirmar senha</Label>
-              <Input
-                id="confirmarSenha"
-                type="password"
-                value={formData.confirmarSenha}
-                onChange={(e) => handleChange("confirmarSenha", e.target.value)}
-                placeholder="Repita a senha"
-                inputSize="lg"
-                className="mt-1.5"
-              />
-            </div>
-            <div className="rounded-lg bg-muted p-4">
-              <p className="mb-2 text-sm font-medium">Sua senha deve conter:</p>
-              <ul className="space-y-1 text-sm text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className={`h-4 w-4 ${formData.senha.length >= 8 ? "text-success" : ""}`} />
-                  Mínimo 8 caracteres
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className={`h-4 w-4 ${/[A-Z]/.test(formData.senha) ? "text-success" : ""}`} />
-                  Uma letra maiúscula
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className={`h-4 w-4 ${/[0-9]/.test(formData.senha) ? "text-success" : ""}`} />
-                  Um número
-                </li>
-              </ul>
-            </div>
-          </motion.div>
-        );
-      case 3:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="termos"
-                checked={formData.termos}
-                onCheckedChange={(checked) => handleChange("termos", checked === true)}
-              />
-              <div>
-                <Label htmlFor="termos" className="cursor-pointer">
-                  Li e aceito os{" "}
-                  <Link to="/termos" className="text-accent hover:underline">
-                    Termos de Uso
-                  </Link>
-                </Label>
-                <p className="text-xs text-muted-foreground">Obrigatório para usar a plataforma</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="privacidade"
-                checked={formData.privacidade}
-                onCheckedChange={(checked) => handleChange("privacidade", checked === true)}
-              />
-              <div>
-                <Label htmlFor="privacidade" className="cursor-pointer">
-                  Li e aceito a{" "}
-                  <Link to="/privacidade" className="text-accent hover:underline">
-                    Política de Privacidade
-                  </Link>
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Seus dados são protegidos conforme LGPD
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="marketing"
-                checked={formData.marketing}
-                onCheckedChange={(checked) => handleChange("marketing", checked === true)}
-              />
-              <div>
-                <Label htmlFor="marketing" className="cursor-pointer">
-                  Aceito receber comunicações do DocHub
-                </Label>
-                <p className="text-xs text-muted-foreground">
-                  Novidades, conteúdos e ofertas relevantes (opcional)
-                </p>
-              </div>
-            </div>
-
-            <div className="rounded-lg border bg-accent/5 p-4">
-              <h4 className="mb-2 font-medium text-foreground">Como seus dados são usados</h4>
-              <p className="text-sm text-muted-foreground">
-                O DocHub utiliza seus dados para personalizar recomendações, calcular seu score de maturidade e sugerir serviços adequados ao seu perfil. Você pode solicitar exclusão a qualquer momento.
-              </p>
-            </div>
-          </motion.div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const isStepValid = () => {
-    switch (currentStep) {
-      case 0:
-        return formData.nome && formData.email && formData.telefone;
-      case 1:
-        return formData.crm && formData.uf && formData.especialidade;
-      case 2:
-        return formData.senha.length >= 8 && formData.senha === formData.confirmarSenha;
-      case 3:
-        return formData.termos && formData.privacidade;
-      default:
-        return false;
-    }
-  };
+  const selectClass = "flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
   return (
     <div className="min-h-screen bg-background">
       <Header variant="public" />
-
       <div className="container py-12">
-        <div className="mx-auto max-w-2xl">
-          {/* Progress */}
-          <div className="mb-8">
-            <StepIndicator steps={steps} currentStep={currentStep} />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-auto max-w-lg"
+        >
+          <div className="mb-8 text-center">
+            <h1 className="font-display text-3xl font-bold text-foreground">Dados Profissionais</h1>
+            <p className="mt-2 text-muted-foreground">Preencha para personalizar seu diagnóstico</p>
           </div>
 
-          <Card variant="elevated">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">{steps[currentStep].label}</CardTitle>
-              <CardDescription>{steps[currentStep].description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {renderStep()}
-
-              <div className="mt-8 flex justify-between">
-                <Button
-                  variant="outline"
-                  onClick={handleBack}
-                  disabled={currentStep === 0}
-                >
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Voltar
-                </Button>
-                <Button variant="accent" onClick={handleNext} disabled={!isStepValid()}>
-                  {currentStep === steps.length - 1 ? "Criar Conta" : "Continuar"}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+          <div className="rounded-2xl border bg-card p-8 shadow-card">
+            <div className="space-y-5">
+              <div>
+                <Label htmlFor="name">Nome completo</Label>
+                <Input id="name" placeholder="Dr(a). João Silva" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="mt-1.5" />
               </div>
-            </CardContent>
-          </Card>
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
-            Já tem uma conta?{" "}
-            <Link to="/login" className="font-medium text-accent hover:underline">
-              Fazer login
-            </Link>
-          </p>
-        </div>
+              <div>
+                <Label htmlFor="email">Email profissional</Label>
+                <Input id="email" type="email" placeholder="joao@email.com" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} className="mt-1.5" />
+              </div>
+
+              <div>
+                <Label htmlFor="specialty">Especialidade médica</Label>
+                <select id="specialty" value={form.specialty} onChange={e => setForm(f => ({ ...f, specialty: e.target.value }))} className={`${selectClass} mt-1.5`}>
+                  <option value="">Selecione...</option>
+                  {medicalSpecialties.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="state">Estado</Label>
+                  <select id="state" value={form.state} onChange={e => setForm(f => ({ ...f, state: e.target.value }))} className={`${selectClass} mt-1.5`}>
+                    <option value="">UF...</option>
+                    {brazilianStates.map(s => <option key={s} value={s}>{s}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="city">Cidade</Label>
+                  <Input id="city" placeholder="São Paulo" value={form.city} onChange={e => setForm(f => ({ ...f, city: e.target.value }))} className="mt-1.5" />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="age">Faixa etária</Label>
+                <select id="age" value={form.ageRange} onChange={e => setForm(f => ({ ...f, ageRange: e.target.value }))} className={`${selectClass} mt-1.5`}>
+                  <option value="">Selecione...</option>
+                  {ageRanges.map(a => <option key={a} value={a}>{a} anos</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div className="mt-8 space-y-3">
+              <Button variant="hero" size="lg" className="w-full" onClick={() => handleSubmit('free')} disabled={!isValid}>
+                Teste Free — 12 perguntas
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="lg" className="w-full" onClick={() => handleSubmit('complete')} disabled={!isValid}>
+                Teste Completo — 25 perguntas (R$ 49,90)
+              </Button>
+            </div>
+
+            <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <Shield className="h-3.5 w-3.5" />
+              Seus dados são protegidos e não serão compartilhados
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

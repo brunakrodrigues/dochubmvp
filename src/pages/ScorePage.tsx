@@ -1,315 +1,297 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { ScoreDisplay } from "@/components/DocHubComponents";
 import { Header, Footer } from "@/components/Layout";
+import { useApp } from "@/context/AppContext";
+import { categories } from "@/data/questions";
+import { getLevel, freeReportTexts, completeReportTexts } from "@/data/reportTexts";
+import { marketData } from "@/data/marketData";
+import { ArrowRight, Lock, Calendar } from "lucide-react";
 import {
-  ArrowRight,
-  Download,
-  Share2,
-  TrendingUp,
-  Target,
-  BookOpen,
-  Briefcase,
-  AlertCircle,
-  CheckCircle2,
-  HelpCircle,
-} from "lucide-react";
+  Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, LineChart, Line, Cell,
+} from "recharts";
 
-interface ScoreCategory {
-  id: string;
-  name: string;
-  icon: string;
-  score: number;
-  maxScore: number;
-  status: "low" | "medium" | "good" | "excellent";
-  insights: string[];
+function AnimatedGauge({ score, maxScore }: { score: number; maxScore: number }) {
+  const [animValue, setAnimValue] = useState(0);
+  const pct = (score / maxScore) * 100;
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimValue(pct), 100);
+    return () => clearTimeout(timer);
+  }, [pct]);
+
+  const radius = 90;
+  const circ = Math.PI * radius;
+  const offset = circ - (animValue / 100) * circ;
+
+  return (
+    <div className="relative mx-auto w-56">
+      <svg viewBox="0 0 200 120" className="w-full">
+        <path d="M 10 110 A 90 90 0 0 1 190 110" fill="none" stroke="hsl(var(--border))" strokeWidth="12" strokeLinecap="round" />
+        <motion.path
+          d="M 10 110 A 90 90 0 0 1 190 110"
+          fill="none"
+          stroke="hsl(var(--accent))"
+          strokeWidth="12"
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          initial={{ strokeDashoffset: circ }}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 2, ease: 'easeOut' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-end pb-2">
+        <motion.span
+          className="font-display text-4xl font-bold text-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          {score}
+        </motion.span>
+        <span className="text-xs text-muted-foreground">de {maxScore} pts</span>
+      </div>
+    </div>
+  );
 }
 
-const getMaturityLevel = (score: number): { level: string; description: string; badge: "score-low" | "score-medium" | "score-good" | "score-excellent" } => {
-  if (score < 25) return { level: "Iniciante", description: "Você está começando sua jornada de gestão profissional", badge: "score-low" };
-  if (score < 50) return { level: "Em Desenvolvimento", description: "Você já deu os primeiros passos, mas há muito potencial a explorar", badge: "score-medium" };
-  if (score < 75) return { level: "Avançado", description: "Você possui boa maturidade profissional em várias áreas", badge: "score-good" };
-  return { level: "Expert", description: "Excelente! Você está entre os profissionais mais preparados", badge: "score-excellent" };
-};
-
 export default function ScorePage() {
-  const [searchParams] = useSearchParams();
-  const scoreParam = searchParams.get("score");
-  const [score, setScore] = useState(0);
-  const [showDetails, setShowDetails] = useState(false);
-
-  const finalScore = scoreParam ? parseInt(scoreParam) : 72;
-  const maturity = getMaturityLevel(finalScore);
-
-  const categories: ScoreCategory[] = [
-    {
-      id: "planejamento",
-      name: "Planejamento de Carreira",
-      icon: "📋",
-      score: 65,
-      maxScore: 100,
-      status: "good",
-      insights: ["Você tem metas definidas, mas falta um plano formal documentado"],
-    },
-    {
-      id: "financeiro",
-      name: "Gestão Financeira",
-      icon: "💰",
-      score: 45,
-      maxScore: 100,
-      status: "medium",
-      insights: ["Oportunidade: assessoria tributária especializada pode otimizar seus impostos"],
-    },
-    {
-      id: "reputacao",
-      name: "Imagem e Reputação",
-      icon: "⭐",
-      score: 80,
-      maxScore: 100,
-      status: "excellent",
-      insights: ["Excelente presença digital! Continue produzindo conteúdo"],
-    },
-    {
-      id: "tecnologia",
-      name: "Uso de Tecnologia",
-      icon: "💻",
-      score: 70,
-      maxScore: 100,
-      status: "good",
-      insights: ["Bom uso de ferramentas. Considere integrar seus sistemas"],
-    },
-    {
-      id: "etica",
-      name: "Ética e Compliance",
-      icon: "⚖️",
-      score: 85,
-      maxScore: 100,
-      status: "excellent",
-      insights: ["Documentação ética bem estruturada"],
-    },
-  ];
+  const navigate = useNavigate();
+  const { result, user } = useApp();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setScore(finalScore);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [finalScore]);
+    if (!result) navigate('/');
+  }, [result, navigate]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowDetails(true);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  if (!result) return null;
+
+  const levelInfo = getLevel(result.totalScore, result.maxScore, result.testType);
+  const reportTexts = result.testType === 'free' ? freeReportTexts : completeReportTexts;
+  const reportText = reportTexts[levelInfo.level];
+
+  const radarData = result.categoryScores.map(cs => {
+    const cat = categories.find(c => c.id === cs.category);
+    return {
+      subject: cat?.name.split(' ')[0] || cs.category,
+      fullName: cat?.name || cs.category,
+      value: cs.maxScore > 0 ? Math.round((cs.score / cs.maxScore) * 100) : 0,
+      fullMark: 100,
+    };
+  });
+
+  const barColors = ['hsl(var(--accent))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--info))', 'hsl(var(--destructive))', 'hsl(173 58% 50%)', 'hsl(222 47% 35%)', 'hsl(38 70% 55%)', 'hsl(160 40% 50%)'];
+
+  const userState = user?.state || 'São Paulo';
+  const regionalSalary = marketData.salaryByRegion[userState] || marketData.nationalAverage;
 
   return (
     <div className="min-h-screen bg-background">
       <Header variant="public" />
 
-      {/* Hero Score Section */}
-      <section className="bg-gradient-hero py-16 text-white">
-        <div className="container">
-          <div className="mx-auto max-w-4xl text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <Badge variant="accent" size="lg" className="mb-6">
-                Resultado do Teste Profissional
-              </Badge>
-              <h1 className="mb-4 font-display text-3xl font-bold md:text-4xl">
-                Seu Score de Maturidade Profissional
-              </h1>
+      <div className="container py-12">
+        <div className="mx-auto max-w-4xl">
+          {/* Score Hero */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
+            <AnimatedGauge score={result.totalScore} maxScore={result.maxScore} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-4">
+              <span className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-lg font-bold ${
+                levelInfo.color === 'destructive' ? 'bg-destructive/10 text-destructive' :
+                levelInfo.color === 'warning' ? 'bg-warning/10 text-warning' :
+                levelInfo.color === 'success' ? 'bg-success/10 text-success' :
+                'bg-accent/10 text-accent'
+              }`}>
+                {levelInfo.emoji} {levelInfo.label}
+              </span>
             </motion.div>
+          </motion.div>
 
-            <div className="my-12 flex justify-center">
-              <ScoreDisplay score={score} maxScore={100} size="lg" />
+          {/* Radar Chart */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8 rounded-2xl border bg-card p-6 shadow-card">
+            <h3 className="mb-4 font-display text-lg font-bold text-foreground">Perfil por Dimensão</h3>
+            <div className="h-80">
+              <ResponsiveContainer>
+                <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="75%">
+                  <PolarGrid stroke="hsl(var(--border))" />
+                  <PolarAngleAxis dataKey="subject" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} axisLine={false} />
+                  <Radar name="Score" dataKey="value" stroke="hsl(var(--accent))" fill="hsl(var(--accent))" fillOpacity={0.2} strokeWidth={2} />
+                </RadarChart>
+              </ResponsiveContainer>
             </div>
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.5 }}
-            >
-              <Badge variant={maturity.badge} size="lg" className="mb-4">
-                {maturity.level}
-              </Badge>
-              <p className="text-lg text-white/80">{maturity.description}</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2 }}
-              className="mt-8 flex flex-wrap justify-center gap-4"
-            >
-              <Button variant="hero" size="lg" asChild>
-                <Link to="/recomendacoes">
-                  Ver Recomendações
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="glass" size="lg">
-                <Download className="mr-2 h-4 w-4" />
-                Baixar Relatório
-              </Button>
-              <Button variant="glass" size="lg">
-                <Share2 className="mr-2 h-4 w-4" />
-                Compartilhar
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Score Breakdown */}
-      <section className="py-16">
-        <div className="container">
-          <div className="mx-auto max-w-4xl">
-            <div className="mb-8 flex items-center justify-between">
-              <h2 className="font-display text-2xl font-bold text-foreground">
-                Análise por Dimensão
-              </h2>
-              <Button variant="ghost" onClick={() => setShowDetails(!showDetails)}>
-                {showDetails ? "Ocultar detalhes" : "Mostrar detalhes"}
-              </Button>
+          {/* Category Bars */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="mb-8 rounded-2xl border bg-card p-6 shadow-card">
+            <h3 className="mb-4 font-display text-lg font-bold text-foreground">Score por Categoria</h3>
+            <div className="space-y-3">
+              {result.categoryScores.map((cs, i) => {
+                const cat = categories.find(c => c.id === cs.category);
+                const pct = cs.maxScore > 0 ? Math.round((cs.score / cs.maxScore) * 100) : 0;
+                return (
+                  <div key={cs.category}>
+                    <div className="mb-1 flex items-center justify-between text-sm">
+                      <span className="flex items-center gap-2">
+                        <span>{cat?.icon}</span>
+                        <span className="font-medium text-foreground">{cat?.name}</span>
+                      </span>
+                      <span className="font-mono text-xs text-muted-foreground">{cs.score}/{cs.maxScore}</span>
+                    </div>
+                    <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${pct}%` }}
+                        transition={{ duration: 1, delay: 0.8 + i * 0.1 }}
+                        className="h-full rounded-full"
+                        style={{ backgroundColor: barColors[i % barColors.length] }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
+          </motion.div>
 
-            <div className="grid gap-4">
-              {categories.map((category, index) => (
-                <motion.div
-                  key={category.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 2.2 + index * 0.1 }}
-                >
-                  <Card variant="default">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <span className="text-3xl">{category.icon}</span>
-                          <div>
-                            <h3 className="font-semibold text-foreground">{category.name}</h3>
-                            <Badge variant={`score-${category.status}`} size="sm" className="mt-1">
-                              {category.score}%
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="w-32">
-                          <Progress
-                            value={category.score}
-                            size="lg"
-                            indicatorVariant={
-                              category.status === "excellent" ? "accent" :
-                              category.status === "good" ? "success" :
-                              category.status === "medium" ? "warning" : "destructive"
-                            }
-                          />
-                        </div>
-                      </div>
+          {/* Report Text */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mb-8 rounded-2xl border bg-card p-6 shadow-card">
+            <h3 className="mb-3 font-display text-lg font-bold text-foreground">Seu Diagnóstico</h3>
+            <p className="leading-relaxed text-muted-foreground">{reportText}</p>
+          </motion.div>
 
-                      {showDetails && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          className="mt-4 border-t pt-4"
-                        >
-                          {category.insights.map((insight, idx) => (
-                            <div key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                              <span>{insight}</span>
-                            </div>
-                          ))}
-                        </motion.div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+          {/* Complete-only: Market Data */}
+          {result.testType === 'complete' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}>
+              <h3 className="mb-4 font-display text-xl font-bold text-foreground">Dados do Mercado</h3>
 
-      {/* How Score is Used */}
-      <section className="border-t bg-muted/50 py-16">
-        <div className="container">
-          <div className="mx-auto max-w-4xl">
-            <Card variant="accent">
-              <CardHeader>
-                <div className="flex items-center gap-2">
-                  <HelpCircle className="h-5 w-5 text-accent" />
-                  <CardTitle className="text-lg">Como este score é utilizado</CardTitle>
+              <div className="mb-6 grid gap-4 md:grid-cols-2">
+                <div className="rounded-2xl border bg-card p-6 shadow-card">
+                  <h4 className="mb-3 text-sm font-semibold text-foreground">Salário Médio: Sua Região vs Nacional</h4>
+                  <div className="h-48">
+                    <ResponsiveContainer>
+                      <BarChart data={[
+                        { name: userState, value: regionalSalary },
+                        { name: 'Média Nacional', value: marketData.nationalAverage },
+                      ]}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+                        <YAxis tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
+                        <Tooltip formatter={(v: number) => `R$ ${v.toLocaleString('pt-BR')}`} />
+                        <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                          <Cell fill="hsl(var(--accent))" />
+                          <Cell fill="hsl(var(--muted-foreground))" />
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4 text-muted-foreground">
-                  Seu score de maturidade profissional é utilizado de forma transparente para:
+
+                <div className="rounded-2xl border bg-card p-6 shadow-card">
+                  <h4 className="mb-3 text-sm font-semibold text-foreground">Evolução do Número de Médicos no Brasil</h4>
+                  <div className="h-48">
+                    <ResponsiveContainer>
+                      <LineChart data={marketData.doctorsEvolution}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis dataKey="year" tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} />
+                        <YAxis tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }} tickFormatter={v => `${(v / 1000).toFixed(0)}k`} />
+                        <Tooltip formatter={(v: number) => v.toLocaleString('pt-BR')} />
+                        <Line type="monotone" dataKey="count" stroke="hsl(var(--accent))" strokeWidth={2} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mb-6 grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border bg-card p-6 text-center shadow-card">
+                  <p className="font-display text-3xl font-bold text-accent">{marketData.newDoctors2026.toLocaleString('pt-BR')}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Médicos se formarão em 2026</p>
+                </div>
+                <div className="rounded-2xl border bg-card p-6 text-center shadow-card">
+                  <p className="font-display text-3xl font-bold text-foreground">600 mil</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Médicos ativos no Brasil (2025)</p>
+                </div>
+                <div className="rounded-2xl border bg-card p-6 text-center shadow-card">
+                  <p className="font-display text-3xl font-bold text-warning">6-33%</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Faixa tributária (Simples Nacional)</p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-gradient-hero p-8 text-center shadow-xl">
+                <Calendar className="mx-auto h-8 w-8 text-accent" />
+                <h3 className="mt-3 font-display text-2xl font-bold text-primary-foreground">Agende sua Mentoria</h3>
+                <p className="mt-2 text-primary-foreground/70">
+                  {'direction' in levelInfo ? (levelInfo as { direction: string }).direction : 'Converse com um especialista sobre seus resultados'}
                 </p>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="flex gap-3">
-                    <Target className="h-5 w-5 shrink-0 text-accent" />
-                    <div>
-                      <p className="font-medium text-foreground">Personalização</p>
-                      <p className="text-sm text-muted-foreground">
-                        Adaptar conteúdos e trilhas ao seu nível
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <Briefcase className="h-5 w-5 shrink-0 text-accent" />
-                    <div>
-                      <p className="font-medium text-foreground">Recomendações</p>
-                      <p className="text-sm text-muted-foreground">
-                        Sugerir serviços adequados às suas necessidades
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <TrendingUp className="h-5 w-5 shrink-0 text-accent" />
-                    <div>
-                      <p className="font-medium text-foreground">Evolução</p>
-                      <p className="text-sm text-muted-foreground">
-                        Acompanhar seu progresso ao longo do tempo
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* CTA */}
-            <div className="mt-12 text-center">
-              <h3 className="mb-4 font-display text-2xl font-bold text-foreground">
-                Pronto para evoluir sua carreira?
-              </h3>
-              <p className="mb-6 text-muted-foreground">
-                Com base no seu perfil, preparamos recomendações personalizadas de serviços e conteúdos.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button variant="accent" size="lg" asChild>
-                  <Link to="/recomendacoes">
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    Ver Recomendações
-                  </Link>
-                </Button>
-                <Button variant="outline" size="lg" asChild>
-                  <Link to="/servicos">
-                    <Briefcase className="mr-2 h-4 w-4" />
-                    Explorar Serviços
-                  </Link>
+                <Button variant="hero" size="lg" className="mt-6" asChild>
+                  <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20agendar%20uma%20mentoria%20DocHub" target="_blank" rel="noopener noreferrer">
+                    Agendar Mentoria
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
               </div>
-            </div>
+            </motion.div>
+          )}
+
+          {/* Free-only: Upgrade CTA */}
+          {result.testType === 'free' && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}>
+              <div className="relative mb-6 overflow-hidden rounded-2xl border bg-card p-6 shadow-card">
+                <div className="pointer-events-none select-none blur-sm">
+                  <h3 className="font-display text-lg font-bold text-foreground">Dados do Mercado Médico</h3>
+                  <div className="mt-4 grid gap-4 md:grid-cols-2">
+                    <div className="h-40 rounded-xl bg-muted" />
+                    <div className="h-40 rounded-xl bg-muted" />
+                  </div>
+                  <div className="mt-4 grid gap-4 md:grid-cols-3">
+                    <div className="h-24 rounded-xl bg-muted" />
+                    <div className="h-24 rounded-xl bg-muted" />
+                    <div className="h-24 rounded-xl bg-muted" />
+                  </div>
+                </div>
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-card/80 backdrop-blur-sm">
+                  <Lock className="h-10 w-10 text-muted-foreground" />
+                  <h3 className="mt-3 font-display text-xl font-bold text-foreground">Desbloqueie seu Relatório Completo</h3>
+                  <p className="mt-2 max-w-md text-center text-sm text-muted-foreground">
+                    Acesse dados de mercado, análise detalhada por categoria e recomendações personalizadas
+                  </p>
+                  <Button variant="hero" size="lg" className="mt-6" asChild>
+                    <Link to="/paywall">
+                      Desbloquear por R$ 49,90
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border bg-card p-6 shadow-card">
+                <h3 className="mb-4 font-display text-lg font-bold text-foreground">O que você ganha no teste completo</h3>
+                <ul className="grid gap-2 md:grid-cols-2">
+                  {[
+                    '13 perguntas adicionais aprofundadas',
+                    'Gráfico radar detalhado com 9 eixos',
+                    'Relatório personalizado por categoria',
+                    'Dados salariais da sua região',
+                    'Evolução do mercado médico',
+                    'Impacto tributário estimado',
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          )}
+
+          <div className="mt-10 text-center">
+            <Button variant="outline" asChild>
+              <Link to="/">Voltar ao Início</Link>
+            </Button>
           </div>
         </div>
-      </section>
+      </div>
 
       <Footer />
     </div>
