@@ -209,7 +209,39 @@ export default function ResultadoPage() {
           </div>
         </motion.div>
 
-        {/* Scale Legend */}
+        {/* Radar Chart */}
+        <motion.div variants={itemVariants} className="rounded-2xl border bg-card p-8 shadow-card">
+          <h2 className="font-display text-xl font-bold text-foreground mb-6">Visão Geral — Radar de Maturidade</h2>
+          <motion.div
+            className="w-full h-[380px]"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="72%" data={dimensions.map(d => ({ ...d, fullMark: 100 }))}>
+                <PolarGrid stroke="hsl(var(--border))" />
+                <PolarAngleAxis
+                  dataKey="name"
+                  tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+                  tickFormatter={(v: string) => v.length > 14 ? v.slice(0, 12) + "…" : v}
+                />
+                <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fontSize: 10 }} stroke="hsl(var(--border))" />
+                <Radar
+                  name="Score"
+                  dataKey="score"
+                  stroke="hsl(var(--accent))"
+                  fill="hsl(var(--accent))"
+                  fillOpacity={0.25}
+                  strokeWidth={2}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </motion.div>
+        </motion.div>
+
+
         <motion.div variants={itemVariants} className="rounded-2xl border bg-card p-6 shadow-card">
           <h3 className="text-sm font-semibold text-foreground mb-3">Escala de Maturidade</h3>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
