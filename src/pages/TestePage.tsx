@@ -29,11 +29,44 @@ const testQuestions = [
   { dim: 11, text: "Você utiliza inteligência artificial ou automação na sua rotina?", options: ["Não uso nada", "Uso ChatGPT esporadicamente", "Ferramentas de IA integradas à prática", "IA + automação de processos administrativos e clínicos"] },
 ];
 
+const slideVariants = {
+  enter: (dir: number) => ({
+    x: dir > 0 ? 120 : -120,
+    opacity: 0,
+    scale: 0.96,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+  },
+  exit: (dir: number) => ({
+    x: dir > 0 ? -120 : 120,
+    opacity: 0,
+    scale: 0.96,
+  }),
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.97 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      delay: 0.15 + i * 0.08,
+      duration: 0.35,
+      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+    },
+  }),
+};
+
 export default function TestePage() {
   const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<(number | null)[]>(Array(12).fill(null));
   const [direction, setDirection] = useState(1);
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   const total = testQuestions.length;
   const progress = ((current + 1) / total) * 100;
@@ -42,24 +75,27 @@ export default function TestePage() {
   const dimNum = dimNumbers[q.dim];
 
   const handleSelect = useCallback((optionIdx: number) => {
+    setSelectedIdx(optionIdx);
     const value = optionIdx + 1;
     setAnswers(prev => { const n = [...prev]; n[current] = value; return n; });
     setTimeout(() => {
+      setSelectedIdx(null);
       if (current < total - 1) {
         setDirection(1);
         setCurrent(c => c + 1);
       } else {
         navigate("/resultado");
       }
-    }, 400);
+    }, 500);
   }, [current, total, navigate]);
 
   const goBack = () => {
-    if (current > 0) { setDirection(-1); setCurrent(c => c - 1); }
+    if (current > 0) { setDirection(-1); setSelectedIdx(null); setCurrent(c => c - 1); }
   };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      {/* Progress Header */}
       <div className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
         <div className="container py-4">
           <div className="flex items-center justify-between mb-3">
@@ -70,41 +106,102 @@ export default function TestePage() {
               Questão {current + 1} de {total} — {Math.round(progress)}% completo
             </span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <motion.div
+            className="h-2 rounded-full bg-muted overflow-hidden"
+          >
+            <motion.div
+              className="h-full rounded-full bg-accent"
+              initial={false}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            />
+          </motion.div>
         </div>
       </div>
 
+      {/* Question Area */}
       <div className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-2xl">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={current}
               custom={direction}
-              initial={{ opacity: 0, x: direction * 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -direction * 60 }}
-              transition={{ duration: 0.3 }}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.25 },
+                scale: { duration: 0.25 },
+              }}
             >
-              <span className="inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent mb-2">
+              {/* Dimension Badge */}
+              <motion.span
+                className="inline-block rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-accent mb-2"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
+              >
                 {dimName}
-              </span>
-              <h2 className="font-display text-2xl font-bold text-foreground md:text-3xl mb-8">{q.text}</h2>
+              </motion.span>
+
+              {/* Question Text */}
+              <motion.h2
+                className="font-display text-2xl font-bold text-foreground md:text-3xl mb-8"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.35 }}
+              >
+                {q.text}
+              </motion.h2>
+
+              {/* Option Cards */}
               <div className="space-y-3">
                 {q.options.map((opt, i) => {
-                  const selected = answers[current] === i + 1;
+                  const isSelected = selectedIdx === i;
+                  const wasSelected = answers[current] === i + 1 && selectedIdx === null;
+                  const active = isSelected || wasSelected;
+
                   return (
                     <motion.button
                       key={i}
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.99 }}
-                      onClick={() => handleSelect(i)}
-                      className={`w-full text-left rounded-xl border-2 p-5 transition-all ${selected ? "border-accent bg-accent/10 shadow-accent" : "border-border bg-card hover:border-accent/30 hover:shadow-card-hover"}`}
+                      custom={i}
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="visible"
+                      whileHover={{ scale: 1.015, boxShadow: "0 4px 20px -4px hsla(var(--accent) / 0.15)" }}
+                      whileTap={{ scale: 0.985 }}
+                      onClick={() => !selectedIdx && selectedIdx !== 0 && handleSelect(i)}
+                      className={`w-full text-left rounded-xl border-2 p-5 transition-colors ${
+                        active
+                          ? "border-accent bg-accent/10 shadow-accent"
+                          : "border-border bg-card hover:border-accent/30"
+                      }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${selected ? "border-accent bg-accent text-accent-foreground" : "border-border"}`}>
-                          {selected ? <Check className="h-4 w-4" /> : <span className="text-sm text-muted-foreground">{String.fromCharCode(65 + i)}</span>}
-                        </div>
-                        <span className={`text-sm font-medium ${selected ? "text-accent" : "text-foreground"}`}>{opt}</span>
+                        <motion.div
+                          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                            active ? "border-accent bg-accent text-accent-foreground" : "border-border"
+                          }`}
+                          animate={isSelected ? { scale: [1, 1.2, 1] } : {}}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {active ? (
+                            <motion.div
+                              initial={{ scale: 0, rotate: -90 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                            >
+                              <Check className="h-4 w-4" />
+                            </motion.div>
+                          ) : (
+                            <span className="text-sm text-muted-foreground">{String.fromCharCode(65 + i)}</span>
+                          )}
+                        </motion.div>
+                        <span className={`text-sm font-medium ${active ? "text-accent" : "text-foreground"}`}>
+                          {opt}
+                        </span>
                       </div>
                     </motion.button>
                   );
@@ -115,6 +212,7 @@ export default function TestePage() {
         </div>
       </div>
 
+      {/* Bottom Bar */}
       <div className="border-t bg-background/95 backdrop-blur">
         <div className="container flex items-center justify-between py-4">
           <Button variant="ghost" onClick={goBack} disabled={current === 0}>
