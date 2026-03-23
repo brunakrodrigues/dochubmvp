@@ -12,16 +12,10 @@ export const completeReportTexts = {
   mentor: "Além da base avançada, seu perfil de líder permite explorar cases de desenvolvimento de novos negócios, construção de posicionamento como multiplicador de conhecimento, inserção ativa na mudança positiva do mercado de saúde, e busca de equilíbrio entre todos os atores do sistema.",
 };
 
-export function getLevel(score: number, maxScore: number, testType: 'free' | 'complete') {
-  if (testType === 'free') {
-    if (score <= 19) return { level: 'iniciante' as const, label: 'Iniciante', color: 'destructive', emoji: '🔴' };
-    if (score <= 33) return { level: 'intermediario' as const, label: 'Intermediário', color: 'warning', emoji: '🟡' };
-    if (score <= 43) return { level: 'avancado' as const, label: 'Avançado', color: 'success', emoji: '🟢' };
-    return { level: 'mentor' as const, label: 'Candidato a Mentor', color: 'accent', emoji: '🔵' };
-  }
-  // complete
-  if (score <= 40) return { level: 'iniciante' as const, label: 'Iniciante', color: 'destructive', emoji: '🔴', direction: 'Mentoria básica + Assessoria de estruturação' };
-  if (score <= 70) return { level: 'intermediario' as const, label: 'Intermediário', color: 'warning', emoji: '🟡', direction: 'Mentoria personalizada + Assessoria setorial' };
-  if (score <= 90) return { level: 'avancado' as const, label: 'Avançado', color: 'success', emoji: '🟢', direction: 'Mentoria estratégica + Desenvolvimento de projetos' };
-  return { level: 'mentor' as const, label: 'Líder de Valor', color: 'accent', emoji: '🔵', direction: 'Mentoria premium + Novos negócios + Inserção como mentor' };
+// Unified 0-100 scale for both test modes
+export function getLevel(score: number, _maxScore: number, _testType: 'free' | 'complete') {
+  if (score <= 40) return { level: 'iniciante' as const, label: 'Iniciante', color: 'destructive', emoji: '🔴' };
+  if (score <= 65) return { level: 'intermediario' as const, label: 'Intermediário', color: 'warning', emoji: '🟡' };
+  if (score <= 85) return { level: 'avancado' as const, label: 'Avançado', color: 'info', emoji: '🟢' };
+  return { level: 'mentor' as const, label: 'Referência', color: 'accent', emoji: '🔵' };
 }
