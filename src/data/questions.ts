@@ -1,274 +1,275 @@
 export interface Question {
   id: number;
   category: string;
+  categoryLabel: string;
   text: string;
   options: { text: string; value: number }[];
   testType: 'free' | 'complete' | 'both';
 }
 
 export const categories = [
-  { id: 'imagem', name: 'Imagem e Reputação', icon: '🌟' },
-  { id: 'etica', name: 'Ética e Conduta Profissional', icon: '⚖️' },
   { id: 'planejamento', name: 'Planejamento de Carreira', icon: '📋' },
+  { id: 'financeiro', name: 'Gestão Financeira', icon: '💰' },
+  { id: 'imagem', name: 'Imagem e Reputação', icon: '🌟' },
   { id: 'metas', name: 'Metas Profissionais', icon: '🎯' },
   { id: 'qualidade', name: 'Qualidade e Resultados', icon: '📊' },
-  { id: 'tecnologia', name: 'Uso de Tecnologia e Inovação', icon: '💻' },
-  { id: 'financeiro', name: 'Gestão Financeira e Benefícios', icon: '💰' },
-  { id: 'assessorias', name: 'Assessorias e Suporte Profissional', icon: '🤝' },
-  { id: 'negocio', name: 'Visão de Negócio e Empreendedorismo', icon: '🚀' },
+  { id: 'etica', name: 'Ética e Conduta', icon: '⚖️' },
+  { id: 'tecnologia', name: 'Uso de Tecnologia', icon: '💻' },
+  { id: 'assessorias', name: 'Assessorias e Suporte', icon: '🤝' },
+  { id: 'negocio', name: 'Visão Empreendedora', icon: '🚀' },
 ];
 
 export const questions: Question[] = [
-  // FREE (12 questions - also used in complete)
+  // FREE (12 questions) — also used in complete
   {
-    id: 1, category: 'imagem', testType: 'both',
-    text: 'Como você define hoje a sua presença profissional (redes, eventos, mídia, relacionamento)?',
+    id: 1, category: 'planejamento', categoryLabel: 'Planejamento de Carreira', testType: 'both',
+    text: 'Você possui um plano de carreira estruturado para os próximos 5 anos?',
     options: [
-      { text: 'Tenho presença consolidada e intencional', value: 4 },
-      { text: 'Estou em construção, com presença irregular', value: 3 },
-      { text: 'Tenho presença limitada e sem estratégia', value: 2 },
-      { text: 'Evito exposição profissional', value: 1 },
+      { text: 'Não pensei nisso ainda', value: 0 },
+      { text: 'Tenho ideias vagas', value: 33 },
+      { text: 'Tenho metas definidas mas não documentadas', value: 66 },
+      { text: 'Tenho plano escrito e revisado periodicamente', value: 100 },
     ],
   },
   {
-    id: 2, category: 'imagem', testType: 'both',
-    text: 'Você utiliza estratégias de posicionamento digital e de reputação?',
+    id: 2, category: 'financeiro', categoryLabel: 'Gestão Financeira', testType: 'both',
+    text: 'Como você gerencia a tributação dos seus rendimentos médicos?',
     options: [
-      { text: 'Sim, com acompanhamento especializado', value: 4 },
-      { text: 'Sim, de forma autônoma', value: 3 },
-      { text: 'Não, mas tenho interesse', value: 2 },
-      { text: 'Não considero necessário', value: 1 },
+      { text: 'Não controlo ativamente', value: 0 },
+      { text: 'Faço o básico no IR', value: 33 },
+      { text: 'Tenho contador mas sem planejamento', value: 66 },
+      { text: 'Planejamento tributário ativo com PJ e investimentos', value: 100 },
     ],
   },
   {
-    id: 3, category: 'etica', testType: 'both',
-    text: 'Como você age diante de dilemas éticos (ex: conflitos de interesse, privacidade, marketing)?',
+    id: 3, category: 'imagem', categoryLabel: 'Imagem e Reputação', testType: 'both',
+    text: 'Qual sua presença digital profissional?',
     options: [
-      { text: 'Tenho protocolos e referências definidos', value: 4 },
-      { text: 'Busco apoio de colegas ou entidades', value: 3 },
-      { text: 'Tomo decisões por experiência pessoal', value: 2 },
-      { text: 'Não sei como proceder', value: 1 },
+      { text: 'Não tenho presença digital', value: 0 },
+      { text: 'Perfil básico em 1 rede social', value: 33 },
+      { text: 'Publico conteúdo esporadicamente', value: 66 },
+      { text: 'Estratégia ativa com conteúdo regular e networking', value: 100 },
     ],
   },
   {
-    id: 4, category: 'planejamento', testType: 'both',
-    text: 'Qual o seu nível de clareza sobre seus objetivos profissionais?',
+    id: 4, category: 'metas', categoryLabel: 'Metas Profissionais', testType: 'both',
+    text: 'Você acompanha indicadores de desempenho da sua prática clínica?',
     options: [
-      { text: 'Total clareza', value: 4 },
-      { text: 'Parcial clareza', value: 3 },
-      { text: 'Pouca clareza', value: 2 },
-      { text: 'Nenhuma clareza', value: 1 },
+      { text: 'Não acompanho nenhum indicador', value: 0 },
+      { text: 'Apenas volume de atendimentos', value: 33 },
+      { text: 'Alguns indicadores básicos', value: 66 },
+      { text: 'Dashboard com indicadores clínicos e financeiros', value: 100 },
     ],
   },
   {
-    id: 5, category: 'planejamento', testType: 'both',
-    text: 'Você tem interesse em desenvolver ou expandir negócios na área da saúde?',
+    id: 5, category: 'qualidade', categoryLabel: 'Qualidade e Resultados', testType: 'both',
+    text: 'Qual sua frequência de atualização profissional (congressos, cursos, artigos)?',
     options: [
-      { text: 'Sim, tenho projeto em andamento', value: 4 },
-      { text: 'Sim, mas ainda sem estruturação', value: 3 },
-      { text: 'Tenho ideias, mas sem plano', value: 2 },
-      { text: 'Não tenho interesse', value: 1 },
+      { text: 'Raramente me atualizo', value: 0 },
+      { text: '1-2 vezes por ano', value: 33 },
+      { text: 'Trimestral com certificação', value: 66 },
+      { text: 'Programa contínuo de educação com especialização', value: 100 },
     ],
   },
   {
-    id: 6, category: 'metas', testType: 'both',
-    text: 'Você possui metas de atualização técnica e científica?',
+    id: 6, category: 'etica', categoryLabel: 'Ética e Conduta', testType: 'both',
+    text: 'Como você lida com questões éticas na prática médica?',
     options: [
-      { text: 'Sim, com plano contínuo', value: 4 },
-      { text: 'Sim, de forma pontual', value: 3 },
-      { text: 'Não, mas me atualizo conforme demanda', value: 2 },
-      { text: 'Não tenho metas de atualização', value: 1 },
+      { text: 'Resolvo caso a caso sem referência', value: 0 },
+      { text: 'Conheço o código de ética básico', value: 33 },
+      { text: 'Sigo o código e busco orientação quando necessário', value: 66 },
+      { text: 'Tenho assessoria ética e participo de comitês', value: 100 },
     ],
   },
   {
-    id: 7, category: 'qualidade', testType: 'both',
-    text: 'Você mensura resultados assistenciais e indicadores de qualidade?',
+    id: 7, category: 'tecnologia', categoryLabel: 'Uso de Tecnologia', testType: 'both',
+    text: 'Qual seu nível de adoção de ferramentas digitais na prática clínica?',
     options: [
-      { text: 'Sim, com dados e relatórios periódicos', value: 4 },
-      { text: 'Parcialmente, em alguns casos', value: 3 },
-      { text: 'Raramente', value: 2 },
-      { text: 'Nunca', value: 1 },
+      { text: 'Uso o mínimo necessário', value: 0 },
+      { text: 'Prontuário eletrônico apenas', value: 33 },
+      { text: 'Telemedicina + prontuário + agenda digital', value: 66 },
+      { text: 'Stack digital completo (PEP, telemedicina, automação, IA)', value: 100 },
     ],
   },
   {
-    id: 8, category: 'tecnologia', testType: 'both',
-    text: 'Qual é o seu grau de familiaridade com ferramentas digitais e IA na prática diária?',
+    id: 8, category: 'assessorias', categoryLabel: 'Assessorias e Suporte', testType: 'both',
+    text: 'Você conta com assessoria profissional especializada (jurídica, contábil, marketing)?',
     options: [
-      { text: 'Alta — utilizo diversas soluções integradas', value: 4 },
-      { text: 'Média — uso ferramentas básicas', value: 3 },
-      { text: 'Baixa — uso apenas o essencial', value: 2 },
-      { text: 'Nula — evito ou desconheço', value: 1 },
+      { text: 'Nenhuma assessoria', value: 0 },
+      { text: 'Apenas contador básico', value: 33 },
+      { text: 'Contador + 1 assessoria', value: 66 },
+      { text: 'Equipe completa (contábil, jurídica, marketing, gestão)', value: 100 },
     ],
   },
   {
-    id: 9, category: 'financeiro', testType: 'both',
-    text: 'Você possui seguros e benefícios adequados à sua atividade profissional?',
+    id: 9, category: 'negocio', categoryLabel: 'Visão Empreendedora', testType: 'both',
+    text: 'Você trata sua atividade médica como um negócio?',
     options: [
-      { text: 'Sim, completos (vida, saúde, previdência, responsabilidade civil)', value: 4 },
-      { text: 'Parcialmente', value: 3 },
-      { text: 'Apenas plano de saúde', value: 2 },
-      { text: 'Nenhum', value: 1 },
+      { text: 'Sou apenas médico', value: 0 },
+      { text: 'Penso nisso mas não atuo', value: 33 },
+      { text: 'Tenho gestão básica (receitas e despesas)', value: 66 },
+      { text: 'Gestão profissional com indicadores, metas e plano de crescimento', value: 100 },
     ],
   },
   {
-    id: 10, category: 'financeiro', testType: 'both',
-    text: 'Como você administra suas finanças e investimentos?',
+    id: 10, category: 'planejamento', categoryLabel: 'Planejamento de Carreira', testType: 'both',
+    text: 'Você tem um plano de aposentadoria/independência financeira?',
     options: [
-      { text: 'Tenho acompanhamento profissional', value: 4 },
-      { text: 'Gerencio por conta própria com planejamento', value: 3 },
-      { text: 'Sem planejamento estruturado', value: 2 },
-      { text: 'Não faço gestão financeira', value: 1 },
+      { text: 'Nunca pensei nisso', value: 0 },
+      { text: 'Ideia vaga de que preciso', value: 33 },
+      { text: 'Tenho investimentos mas sem meta', value: 66 },
+      { text: 'Plano estruturado com metas e acompanhamento', value: 100 },
     ],
   },
   {
-    id: 11, category: 'assessorias', testType: 'both',
-    text: 'Você conta com assessoria contábil, jurídica ou fiscal?',
+    id: 11, category: 'imagem', categoryLabel: 'Imagem e Reputação', testType: 'both',
+    text: 'Como você gerencia sua reputação online (avaliações, comentários, Google)?',
     options: [
-      { text: 'Sim, todas', value: 4 },
-      { text: 'Parcialmente', value: 3 },
-      { text: 'Apenas uma', value: 2 },
-      { text: 'Nenhuma', value: 1 },
+      { text: 'Não monitoro', value: 0 },
+      { text: 'Vejo quando alguém menciona', value: 33 },
+      { text: 'Monitoro periodicamente', value: 66 },
+      { text: 'Gestão ativa com resposta a avaliações e estratégia', value: 100 },
     ],
   },
   {
-    id: 12, category: 'negocio', testType: 'both',
-    text: 'Você gostaria de desenvolver um projeto com suporte técnico e mentoria?',
+    id: 12, category: 'tecnologia', categoryLabel: 'Uso de Tecnologia', testType: 'both',
+    text: 'Você utiliza inteligência artificial ou automação na sua rotina?',
     options: [
-      { text: 'Sim, imediato', value: 4 },
-      { text: 'Sim, a médio prazo', value: 3 },
-      { text: 'Talvez', value: 2 },
-      { text: 'Não', value: 1 },
+      { text: 'Não uso nada', value: 0 },
+      { text: 'Uso ChatGPT esporadicamente', value: 33 },
+      { text: 'Ferramentas de IA integradas à prática', value: 66 },
+      { text: 'IA + automação de processos administrativos e clínicos', value: 100 },
     ],
   },
-  // COMPLETE-ONLY (13 additional questions)
+  // COMPLETE-ONLY (13 additional premium questions)
   {
-    id: 13, category: 'imagem', testType: 'complete',
-    text: 'Em que medida você se preocupa com o impacto da sua imagem sobre pacientes e parceiros?',
+    id: 13, category: 'planejamento', categoryLabel: 'Planejamento de Carreira', testType: 'complete',
+    text: 'Você revisa e atualiza seu plano de carreira com que frequência?',
     options: [
-      { text: 'Constantemente', value: 4 },
-      { text: 'Ocasionalmente', value: 3 },
-      { text: 'Raramente', value: 2 },
-      { text: 'Nunca pensei sobre isso', value: 1 },
-    ],
-  },
-  {
-    id: 14, category: 'imagem', testType: 'complete',
-    text: 'Você já recebeu orientações ou realizou uma mentoria sobre imagem e comunicação?',
-    options: [
-      { text: 'Sim, recentemente', value: 4 },
-      { text: 'Sim, há mais de 1 ano', value: 3 },
-      { text: 'Não, apenas me aconselho com outros profissionais da área de saúde', value: 2 },
-      { text: 'Nunca', value: 1 },
+      { text: 'Nunca revisei', value: 0 },
+      { text: 'Quando surge uma oportunidade', value: 33 },
+      { text: 'Anualmente', value: 66 },
+      { text: 'Trimestralmente com mentor ou coach', value: 100 },
     ],
   },
   {
-    id: 15, category: 'etica', testType: 'complete',
-    text: 'Você conhece e aplica o código de ética da sua profissão?',
+    id: 14, category: 'financeiro', categoryLabel: 'Gestão Financeira', testType: 'complete',
+    text: 'Qual a diversificação dos seus investimentos?',
     options: [
-      { text: 'Conheço profundamente', value: 4 },
-      { text: 'Conheço parcialmente', value: 3 },
-      { text: 'Tenho noções básicas', value: 2 },
-      { text: 'Não conheço', value: 1 },
+      { text: 'Não invisto', value: 0 },
+      { text: 'Apenas poupança', value: 33 },
+      { text: '2-3 tipos de investimento', value: 66 },
+      { text: 'Carteira diversificada com acompanhamento profissional', value: 100 },
     ],
   },
   {
-    id: 16, category: 'etica', testType: 'complete',
-    text: 'Como avalia seu compromisso com sigilo, transparência e integridade?',
+    id: 15, category: 'financeiro', categoryLabel: 'Gestão Financeira', testType: 'complete',
+    text: 'Você separa finanças pessoais de profissionais?',
     options: [
-      { text: 'Totalmente aderente', value: 4 },
-      { text: 'Parcialmente aderente', value: 3 },
-      { text: 'Pouco aderente', value: 2 },
-      { text: 'Não sigo formalmente', value: 1 },
+      { text: 'Tudo junto na mesma conta', value: 0 },
+      { text: 'Tento separar mas misturo', value: 33 },
+      { text: 'Contas separadas sem controle rigoroso', value: 66 },
+      { text: 'Contas, contabilidade e planejamento 100% separados', value: 100 },
     ],
   },
   {
-    id: 17, category: 'planejamento', testType: 'complete',
-    text: 'Você possui um plano de carreira estruturado para os próximos 3 a 5 anos?',
+    id: 16, category: 'imagem', categoryLabel: 'Imagem e Reputação', testType: 'complete',
+    text: 'Você tem uma estratégia de personal branding definida?',
     options: [
-      { text: 'Sim, documentado e revisado periodicamente', value: 4 },
-      { text: 'Sim, mas de forma informal', value: 3 },
-      { text: 'Tenho apenas metas pontuais', value: 2 },
-      { text: 'Não possuo plano definido', value: 1 },
+      { text: 'Não sei o que é isso', value: 0 },
+      { text: 'Sei que é importante mas não faço', value: 33 },
+      { text: 'Tenho ações pontuais', value: 66 },
+      { text: 'Estratégia documentada com metas e métricas', value: 100 },
     ],
   },
   {
-    id: 18, category: 'planejamento', testType: 'complete',
-    text: 'Você tem acompanhamento (mentoria, coaching, supervisão) para desenvolvimento profissional?',
+    id: 17, category: 'metas', categoryLabel: 'Metas Profissionais', testType: 'complete',
+    text: 'Como você mede a satisfação dos seus pacientes?',
     options: [
-      { text: 'Sim, com frequência regular', value: 4 },
-      { text: 'Sim, de forma pontual', value: 3 },
-      { text: 'Não, mas gostaria de ter', value: 2 },
-      { text: 'Não vejo necessidade', value: 1 },
+      { text: 'Não meço', value: 0 },
+      { text: 'Percepção informal', value: 33 },
+      { text: 'Pesquisa esporádica', value: 66 },
+      { text: 'NPS ou pesquisa estruturada com ações de melhoria', value: 100 },
     ],
   },
   {
-    id: 19, category: 'metas', testType: 'complete',
-    text: 'Suas metas profissionais são documentadas e mensuráveis?',
+    id: 18, category: 'qualidade', categoryLabel: 'Qualidade e Resultados', testType: 'complete',
+    text: 'Você participa de programas de certificação ou acreditação?',
     options: [
-      { text: 'Sim, com indicadores e prazos definidos', value: 4 },
-      { text: 'Parcialmente, com metas gerais', value: 3 },
-      { text: 'Tenho metas subjetivas', value: 2 },
-      { text: 'Não defino metas', value: 1 },
+      { text: 'Nenhum', value: 0 },
+      { text: 'Já pensei mas não busquei', value: 33 },
+      { text: 'Em processo de certificação', value: 66 },
+      { text: 'Certificações ativas e em manutenção', value: 100 },
     ],
   },
   {
-    id: 20, category: 'metas', testType: 'complete',
-    text: 'Você revisa seus resultados periodicamente?',
+    id: 19, category: 'qualidade', categoryLabel: 'Qualidade e Resultados', testType: 'complete',
+    text: 'Como você documenta e analisa seus resultados clínicos?',
     options: [
-      { text: 'Mensalmente', value: 4 },
-      { text: 'Trimestralmente', value: 3 },
-      { text: 'Esporadicamente', value: 2 },
-      { text: 'Nunca', value: 1 },
+      { text: 'Não documento além do prontuário', value: 0 },
+      { text: 'Registro básico', value: 33 },
+      { text: 'Banco de dados próprio', value: 66 },
+      { text: 'Sistema de indicadores com análise periódica', value: 100 },
     ],
   },
   {
-    id: 21, category: 'qualidade', testType: 'complete',
-    text: 'Você tem clareza sobre o impacto do seu trabalho no custo e desfecho do paciente?',
+    id: 20, category: 'etica', categoryLabel: 'Ética e Conduta', testType: 'complete',
+    text: 'Você tem protocolo para lidar com conflitos de interesse?',
     options: [
-      { text: 'Total clareza', value: 4 },
-      { text: 'Parcial clareza', value: 3 },
-      { text: 'Pouca clareza', value: 2 },
-      { text: 'Não tenho controle', value: 1 },
+      { text: 'Nunca pensei nisso', value: 0 },
+      { text: 'Lido caso a caso', value: 33 },
+      { text: 'Tenho diretrizes informais', value: 66 },
+      { text: 'Protocolo documentado alinhado ao CRM', value: 100 },
     ],
   },
   {
-    id: 22, category: 'qualidade', testType: 'complete',
-    text: 'Como você avalia sua adesão às boas práticas clínicas e protocolos?',
+    id: 21, category: 'tecnologia', categoryLabel: 'Uso de Tecnologia', testType: 'complete',
+    text: 'Como você gerencia a segurança dos dados dos seus pacientes?',
     options: [
-      { text: 'Alta adesão', value: 4 },
-      { text: 'Parcial adesão', value: 3 },
-      { text: 'Baixa adesão', value: 2 },
-      { text: 'Não sigo protocolos formalmente', value: 1 },
+      { text: 'Confio no sistema do hospital/clínica', value: 0 },
+      { text: 'Senha básica nos dispositivos', value: 33 },
+      { text: 'Criptografia e backup', value: 66 },
+      { text: 'Política completa LGPD com DPO e auditorias', value: 100 },
     ],
   },
   {
-    id: 23, category: 'tecnologia', testType: 'complete',
-    text: 'Você vê a IA como aliada para melhorar resultados e produtividade?',
+    id: 22, category: 'assessorias', categoryLabel: 'Assessorias e Suporte', testType: 'complete',
+    text: 'Você tem seguro de responsabilidade civil profissional?',
     options: [
-      { text: 'Sim, com forte potencial', value: 4 },
-      { text: 'Sim, mas com cautela', value: 3 },
-      { text: 'Tenho dúvidas', value: 2 },
-      { text: 'Não acredito nisso', value: 1 },
+      { text: 'Não tenho', value: 0 },
+      { text: 'Já pesquisei mas não contratei', value: 33 },
+      { text: 'Tenho básico', value: 66 },
+      { text: 'Seguro completo revisado anualmente', value: 100 },
     ],
   },
   {
-    id: 24, category: 'assessorias', testType: 'complete',
-    text: 'Você realiza ações de marketing, comunicação e imagem com orientação técnica?',
+    id: 23, category: 'assessorias', categoryLabel: 'Assessorias e Suporte', testType: 'complete',
+    text: 'Como você gerencia contratos com hospitais e operadoras?',
     options: [
-      { text: 'Sim, regularmente', value: 4 },
-      { text: 'Sim, esporadicamente', value: 3 },
-      { text: 'Não, mas gostaria', value: 2 },
-      { text: 'Não vejo necessidade', value: 1 },
+      { text: 'Aceito o que oferecem', value: 0 },
+      { text: 'Leio mas não negocio', value: 33 },
+      { text: 'Negocio termos principais', value: 66 },
+      { text: 'Assessoria jurídica especializada em todos os contratos', value: 100 },
     ],
   },
   {
-    id: 25, category: 'negocio', testType: 'complete',
-    text: 'Você já empreende ou tem plano de negócio na área da saúde?',
+    id: 24, category: 'negocio', categoryLabel: 'Visão Empreendedora', testType: 'complete',
+    text: 'Você tem um plano de expansão ou escala para sua prática?',
     options: [
-      { text: 'Sim, em andamento', value: 4 },
-      { text: 'Tenho projeto estruturado', value: 3 },
-      { text: 'Tenho ideia inicial', value: 2 },
-      { text: 'Não tenho interesse', value: 1 },
+      { text: 'Não penso em expandir', value: 0 },
+      { text: 'Ideia vaga de crescer', value: 33 },
+      { text: 'Plano informal', value: 66 },
+      { text: 'Plano de negócios com metas, investimento e timeline', value: 100 },
+    ],
+  },
+  {
+    id: 25, category: 'negocio', categoryLabel: 'Visão Empreendedora', testType: 'complete',
+    text: 'Como você lida com a gestão de pessoas (equipe, secretárias, sócios)?',
+    options: [
+      { text: 'Faço tudo sozinho', value: 0 },
+      { text: 'Tenho equipe sem gestão formal', value: 33 },
+      { text: 'Reuniões periódicas e feedback', value: 66 },
+      { text: 'Gestão profissional com metas, avaliação e desenvolvimento', value: 100 },
     ],
   },
 ];
@@ -278,4 +279,32 @@ export function getQuestionsForTest(testType: 'free' | 'complete'): Question[] {
     return questions.filter(q => q.testType === 'both' || q.testType === 'free');
   }
   return questions;
+}
+
+export function calculateScores(answers: { questionId: number; selectedValue: number }[], testType: 'free' | 'complete') {
+  const activeQuestions = getQuestionsForTest(testType);
+  const categoryMap = new Map<string, { total: number; count: number; label: string }>();
+
+  for (const cat of categories) {
+    categoryMap.set(cat.id, { total: 0, count: 0, label: cat.name });
+  }
+
+  for (const q of activeQuestions) {
+    const answer = answers.find(a => a.questionId === q.id);
+    if (answer) {
+      const entry = categoryMap.get(q.category)!;
+      entry.total += answer.selectedValue;
+      entry.count += 1;
+    }
+  }
+
+  const categoryScores = categories.map(cat => {
+    const entry = categoryMap.get(cat.id)!;
+    const score = entry.count > 0 ? Math.round(entry.total / entry.count) : 0;
+    return { category: cat.id, label: cat.name, score, maxScore: 100 };
+  });
+
+  const totalScore = Math.round(categoryScores.reduce((sum, c) => sum + c.score, 0) / categoryScores.length);
+
+  return { totalScore, categoryScores };
 }
