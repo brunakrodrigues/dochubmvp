@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Download, Share2, ArrowRight, AlertTriangle } from "lucide-react";
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from "recharts";
 import DashboardLayout from "@/components/DashboardLayout";
 
 const mockDimensions = [
