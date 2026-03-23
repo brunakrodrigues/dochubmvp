@@ -22,11 +22,7 @@ export default function CadastroPage() {
     if (!isValid) return;
     setUser(form);
     setTestType(type);
-    if (type === 'complete') {
-      navigate('/paywall');
-    } else {
-      navigate('/teste');
-    }
+    navigate(`/teste?modo=${type === 'complete' ? 'completo' : 'free'}`);
   };
 
   const selectClass = "flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
