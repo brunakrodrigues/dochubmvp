@@ -95,7 +95,7 @@ const App = () => (
             {/* Partner portal */}
             <Route path="/parceiro/login" element={<ParceiroLoginPage />} />
             <Route path="/parceiro/dashboard" element={<ParceiroDashboardPage />} />
-            <Route path="/parceiro/os/:id" element={<ParceiroOSDetalhePage />} />
+            <Route path="/parceiro/os/:id" element={<ParceiroOsDetalhePage />} />
             <Route path="/parceiro/agenda" element={<ParceiroAgendaPage />} />
             <Route path="/parceiro/repasses" element={<ParceiroRepassesPage />} />
 
