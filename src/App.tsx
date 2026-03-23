@@ -39,7 +39,7 @@ import PerfilPage from "./pages/PerfilPage";
 import NotificacoesPage from "./pages/NotificacoesPage";
 
 // Partner portal
-import { ParceiroLoginPage, ParceiroDashboardPage, ParceiroOSDetalhePage, ParceiroAgendaPage, ParceiroRepassesPage } from "./pages/parceiro/ParceiroPages";
+import { ParceiroLoginPage, ParceiroDashboardPage, ParceiroOsDetalhePage, ParceiroAgendaPage, ParceiroRepassesPage } from "./pages/parceiro/ParceiroPages";
 
 // Operations portal
 import { OperacaoLoginPage, OperacaoPainelPage, OperacaoParceirosPage, OperacaoExcecoesPage, OperacaoConteudoPage, OperacaoPlanosPage } from "./pages/operacao/OperacaoPages";
