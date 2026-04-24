@@ -16,6 +16,12 @@ import {
   LogOut,
   User,
   ChevronDown,
+  Target,
+  Compass,
+  LayoutGrid,
+  Sparkles,
+  ClipboardList,
+  Phone,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -28,9 +34,14 @@ interface NavItem {
 
 const publicNavItems: NavItem[] = [
   { label: "Início", href: "/", icon: Home },
-  { label: "Sobre", href: "/sobre", icon: FileText },
-  { label: "Conteúdo", href: "/conteudo", icon: BookOpen },
-  { label: "Serviços", href: "/servicos", icon: Briefcase },
+  { label: "O propósito", href: "/#proposito", icon: Target },
+  { label: "A jornada", href: "/#jornada", icon: Compass },
+  { label: "A plataforma", href: "/#plataforma", icon: LayoutGrid },
+  { label: "Experiência", href: "/#experiencia", icon: Sparkles },
+  { label: "Painel de serviços", href: "/#painel-servicos", icon: Briefcase },
+  { label: "Teste de carreira", href: "/#teste-carreira", icon: ClipboardList },
+  { label: "Planos", href: "/planos", icon: CreditCard },
+  { label: "Contato", href: "/#contato", icon: Phone },
 ];
 
 const dashboardNavItems: NavItem[] = [
@@ -57,29 +68,40 @@ export function Header({ variant = "public", isAuthenticated = false }: HeaderPr
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary">
-            <span className="font-display text-lg font-bold text-primary-foreground">D</span>
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary shadow-accent">
+            <span className="font-display text-xl font-bold text-primary-foreground">D</span>
           </div>
-          <span className="font-display text-xl font-bold text-foreground">DocHub</span>
+          <div className="flex flex-col leading-tight">
+            <span className="font-display text-xl font-bold text-foreground">DocHub</span>
+            <span className="hidden text-[10px] font-medium uppercase tracking-wider text-muted-foreground sm:block">Professional Pathways</span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-0.5 lg:flex">
           {navItems.map((item) => {
-            const isActive = location.pathname === item.href;
+            const isActive =
+              variant === "dashboard"
+                ? location.pathname === item.href
+                : item.href === "/"
+                  ? location.pathname === "/"
+                  : item.href.startsWith("/#")
+                    ? false
+                    : location.pathname.startsWith(item.href);
+            const showIcon = variant === "dashboard";
             return (
               <Link
                 key={item.href}
                 to={item.href}
                 className={cn(
-                  "relative flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "relative flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors xl:px-3 xl:text-sm",
                   isActive
                     ? "text-accent"
                     : "text-muted-foreground hover:bg-accent/10 hover:text-accent"
                 )}
               >
-                <item.icon className="h-4 w-4" />
+                {showIcon && <item.icon className="h-4 w-4" />}
                 {item.label}
                 {item.badge && (
                   <span className="ml-1 rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground">
@@ -127,7 +149,7 @@ export function Header({ variant = "public", isAuthenticated = false }: HeaderPr
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -139,7 +161,7 @@ export function Header({ variant = "public", isAuthenticated = false }: HeaderPr
       <motion.div
         initial={false}
         animate={{ height: isMobileMenuOpen ? "auto" : 0 }}
-        className="overflow-hidden border-t md:hidden"
+        className="overflow-hidden border-t lg:hidden"
       >
         <nav className="container flex flex-col gap-1 py-4">
           {navItems.map((item) => {
@@ -179,14 +201,17 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-primary">
-                <span className="font-display text-lg font-bold text-primary-foreground">D</span>
+            <Link to="/" className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary shadow-accent">
+                <span className="font-display text-xl font-bold text-primary-foreground">D</span>
               </div>
-              <span className="font-display text-xl font-bold text-foreground">DocHub</span>
+              <div className="flex flex-col leading-tight">
+                <span className="font-display text-xl font-bold text-foreground">DocHub</span>
+                <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Professional Pathways</span>
+              </div>
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
-              Plataforma digital de apoio à carreira médica com inteligência artificial integrada.
+              Serviços essenciais para a carreira médica em um só lugar.
             </p>
           </div>
 
@@ -194,20 +219,20 @@ export function Footer() {
           <div>
             <h4 className="mb-4 font-display font-semibold text-foreground">Plataforma</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/sobre" className="hover:text-accent">Sobre o DocHub</Link></li>
-              <li><Link to="/teste" className="hover:text-accent">Teste Profissional</Link></li>
-              <li><Link to="/servicos" className="hover:text-accent">Serviços</Link></li>
-              <li><Link to="/planos" className="hover:text-accent">Planos</Link></li>
+              <li><Link to="/#proposito" className="hover:text-accent">O propósito</Link></li>
+              <li><Link to="/#jornada" className="hover:text-accent">A jornada</Link></li>
+              <li><Link to="/#plataforma" className="hover:text-accent">A plataforma</Link></li>
+              <li><Link to="/#experiencia" className="hover:text-accent">Experiência</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="mb-4 font-display font-semibold text-foreground">Recursos</h4>
+            <h4 className="mb-4 font-display font-semibold text-foreground">Serviços</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link to="/conteudo" className="hover:text-accent">Conteúdo</Link></li>
-              <li><Link to="/copiloto" className="hover:text-accent">Copiloto IA</Link></li>
-              <li><Link to="/faq" className="hover:text-accent">FAQ</Link></li>
-              <li><Link to="/suporte" className="hover:text-accent">Suporte</Link></li>
+              <li><Link to="/#painel-servicos" className="hover:text-accent">Painel de serviços</Link></li>
+              <li><Link to="/#teste-carreira" className="hover:text-accent">Teste de carreira</Link></li>
+              <li><Link to="/planos" className="hover:text-accent">Planos</Link></li>
+              <li><Link to="/#contato" className="hover:text-accent">Contato</Link></li>
             </ul>
           </div>
 
