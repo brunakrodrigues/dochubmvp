@@ -18,8 +18,8 @@ interface Plan {
 const plans: Plan[] = [
   {
     name: "Standard",
-    price: "R$ 350,00",
-    priceSuffix: "/ mensalidade",
+    price: "R$ 350",
+    priceSuffix: "/mês",
     desc: "Comece sua jornada com o essencial para estruturar a carreira médica.",
     highlight: false,
     cta: "Assinar Standard",
@@ -33,8 +33,8 @@ const plans: Plan[] = [
   },
   {
     name: "Premium",
-    price: "R$ 830,00",
-    priceSuffix: "/ mensalidade",
+    price: "R$ 830",
+    priceSuffix: "/mês",
     desc: "Amplie seu desenvolvimento com workshops e cursos especializados.",
     highlight: true,
     cta: "Assinar Premium",
@@ -46,8 +46,8 @@ const plans: Plan[] = [
   },
   {
     name: "Exclusive",
-    price: "R$ 1.250,00",
-    priceSuffix: "/ mensalidade",
+    price: "R$ 1.250",
+    priceSuffix: "/mês",
     desc: "Mentoria individual e acompanhamento estratégico de carreira.",
     highlight: false,
     cta: "Assinar Exclusive",
@@ -57,6 +57,19 @@ const plans: Plan[] = [
       "Sessões on-line mensais de até 90 minutos",
       "Ferramentas de análise do perfil socioprofissional",
       "Gerenciamento psicossocial",
+    ],
+  },
+  {
+    name: "Associativo",
+    price: "Sob consulta",
+    desc: "Parceria para associações e empresas oferecerem o DocHub aos associados.",
+    highlight: false,
+    cta: "Solicitar proposta",
+    items: [
+      "Plataforma para todos os associados",
+      "Descontos de 15% a 25%",
+      "Plano fidelidade com pontos",
+      "Conteúdos e aulas exclusivas",
     ],
   },
 ];
@@ -136,7 +149,7 @@ export default function PlanosPage() {
       {/* Planos individuais */}
       <section className="py-16 md:py-20">
         <div className="container">
-          <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
+          <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-4">
             {plans.map((p) => (
               <div
                 key={p.name}
@@ -166,7 +179,14 @@ export default function PlanosPage() {
                 <Button
                   variant={p.highlight ? "hero" : "default"}
                   className="mt-6 w-full"
-                  onClick={() => openWa(`Assinatura ${p.name}`, `Olá! Tenho interesse no plano ${p.name}.`)}
+                  onClick={() =>
+                    openWa(
+                      p.name === "Associativo" ? "Plano Associativo" : `Assinatura ${p.name}`,
+                      p.name === "Associativo"
+                        ? "Olá! Gostaria de solicitar uma proposta para o Plano Associativo."
+                        : `Olá! Tenho interesse no plano ${p.name}.`
+                    )
+                  }
                 >
                   {p.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
