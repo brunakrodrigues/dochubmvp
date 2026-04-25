@@ -210,7 +210,7 @@ const maturityLevels = [
   { range: "0 – 40", level: "Iniciante", color: "bg-destructive/10 border-destructive/30 text-destructive", direction: "Mentoria básica + assessorias de estruturação." },
   { range: "41 – 70", level: "Intermediário", color: "bg-warning/10 border-warning/30 text-warning", direction: "Mentoria personalizada + assessoria setorial." },
   { range: "71 – 90", level: "Avançado", color: "bg-success/10 border-success/30 text-success", direction: "Mentoria estratégica + desenvolvimento de projetos." },
-  { range: "91 – 100", level: "Líder de Valor", color: "bg-accent/10 border-accent/40 text-accent", direction: "Mentoria premium + novos negócios + inserção como mentor/consultor parceiro." },
+  { range: "91 – 100", level: "Líder de Valor", color: "bg-info/10 border-info/40 text-info", direction: "Mentoria premium + novos negócios + inserção como mentor/consultor parceiro." },
 ];
 
 type ServiceCategory = {
@@ -330,7 +330,7 @@ export default function LandingPage() {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-accent shadow-accent">
                 <span className="font-display text-2xl font-bold text-accent-foreground">D</span>
               </div>
-              <div className="text-left leading-tight">
+              <div className="text-left leading-snug">
                 <span className="block font-display text-2xl font-bold text-primary-foreground">DocHub</span>
                 <span className="text-[11px] font-medium uppercase tracking-widest text-primary-foreground/60">
                   Professional Pathways
@@ -338,7 +338,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <h1 className="font-display text-4xl font-bold leading-tight text-primary-foreground md:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl font-bold leading-[1.35] text-primary-foreground md:text-5xl lg:text-6xl">
               Serviços essenciais para a{" "}
               <span className="text-accent">carreira médica</span> em um só lugar.
             </h1>
@@ -385,7 +385,7 @@ export default function LandingPage() {
               <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
                 <Target className="h-3.5 w-3.5" /> O propósito
               </span>
-              <h2 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight text-foreground md:text-5xl lg:text-6xl">
+              <h2 className="mt-5 font-display text-4xl font-bold leading-[1.2] tracking-tight text-foreground md:text-5xl lg:text-6xl">
                 Por que o
                 <span className="block text-accent">DocHub existe</span>
               </h2>
@@ -446,75 +446,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* A JORNADA / O CONTEXTO */}
-      <section id="jornada" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
-        <div className="container">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Compass className="h-3.5 w-3.5" /> A jornada
-            </motion.span>
-            <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
-              O contexto do mercado médico
-            </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="mt-3 text-muted-foreground">
-              Dados que mostram por que uma plataforma como o DocHub precisa existir.
-            </motion.p>
-          </motion.div>
-
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {marketStats.map((s, i) => (
-              <motion.div
-                key={s.label}
-                variants={fadeUp}
-                custom={i}
-                className="rounded-2xl border border-border bg-card p-6 shadow-card"
-              >
-                <span className="font-display text-3xl font-bold text-accent md:text-4xl">{s.value}</span>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          <div className="mx-auto mt-10 max-w-4xl rounded-2xl border border-border bg-card p-8 shadow-card">
-            <h3 className="font-display text-lg font-semibold text-foreground">Lacunas estruturais</h3>
-            <ul className="mt-4 grid gap-3 md:grid-cols-3">
-              {contextGaps.map((g) => (
-                <li key={g} className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
-                  {g}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* O FUTURO */}
-      <section id="futuro" className="scroll-mt-24 py-20 md:py-24">
-        <div className="container">
-          <div className="mx-auto max-w-4xl rounded-3xl bg-gradient-hero p-10 text-center shadow-xl md:p-14">
-            <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Sparkles className="h-3.5 w-3.5" /> O futuro
-            </span>
-            <h2 className="mt-5 font-display text-3xl font-bold text-primary-foreground md:text-4xl">
-              A carreira médica exige preparo além da formação tradicional.
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-primary-foreground/80 md:text-lg">
-              O médico precisa atuar além da prática clínica, desenvolvendo gestão, carreira, tecnologia, negócios,
-              comunicação, ética, IA e visão estratégica. A plataforma conecta conhecimento, serviços, orientação e
-              oportunidades para apoiar médicos em uma jornada mais estratégica, segura e sustentável.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-              {["Gestão", "Carreira", "Tecnologia", "Negócios", "Comunicação", "Ética", "IA", "Estratégia"].map((tag) => (
-                <span key={tag} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium text-primary-foreground/80">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* A PLATAFORMA — Bento grid */}
       <section id="plataforma" className="scroll-mt-24 overflow-hidden border-y bg-primary py-20 text-primary-foreground md:py-24">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
@@ -551,7 +482,7 @@ export default function LandingPage() {
                   custom={i}
                   className={`group relative flex flex-col overflow-hidden rounded-3xl border p-6 transition-all ${spanClass} ${
                     featured
-                      ? "border-accent/30 bg-gradient-to-br from-accent/20 via-accent/10 to-primary shadow-[0_0_40px_-12px_hsl(173_58%_39%_/_0.4)] hover:border-accent/60"
+                      ? "border-accent/30 bg-gradient-to-br from-accent/20 via-accent/10 to-primary shadow-[0_0_40px_-12px_hsl(27_70%_60%_/_0.4)] hover:border-accent/60"
                       : "border-white/10 bg-white/[0.04] backdrop-blur hover:border-accent/40 hover:bg-white/[0.07]"
                   }`}
                 >
@@ -639,15 +570,84 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* A JORNADA / O CONTEXTO */}
+      <section id="jornada" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
+        <div className="container">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
+              <Compass className="h-3.5 w-3.5" /> A jornada
+            </motion.span>
+            <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
+              O contexto do mercado médico
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-3 text-muted-foreground">
+              Dados que mostram por que uma plataforma como o DocHub precisa existir.
+            </motion.p>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {marketStats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                variants={fadeUp}
+                custom={i}
+                className="rounded-2xl border border-border bg-card p-6 shadow-card"
+              >
+                <span className="font-display text-3xl font-bold text-accent md:text-4xl">{s.value}</span>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.label}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <div className="mx-auto mt-10 max-w-4xl rounded-2xl border border-border bg-card p-8 shadow-card">
+            <h3 className="font-display text-lg font-semibold text-foreground">Lacunas estruturais</h3>
+            <ul className="mt-4 grid gap-3 md:grid-cols-3">
+              {contextGaps.map((g) => (
+                <li key={g} className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
+                  {g}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* O FUTURO */}
+      <section id="futuro" className="scroll-mt-24 py-20 md:py-24">
+        <div className="container">
+          <div className="mx-auto max-w-4xl rounded-3xl bg-gradient-hero p-10 text-center shadow-xl md:p-14">
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
+              <Sparkles className="h-3.5 w-3.5" /> O futuro
+            </span>
+            <h2 className="mt-5 font-display text-3xl font-bold text-primary-foreground md:text-4xl">
+              A carreira médica exige preparo além da formação tradicional.
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-primary-foreground/80 md:text-lg">
+              O médico precisa atuar além da prática clínica, desenvolvendo gestão, carreira, tecnologia, negócios,
+              comunicação, ética, IA e visão estratégica. A plataforma conecta conhecimento, serviços, orientação e
+              oportunidades para apoiar médicos em uma jornada mais estratégica, segura e sustentável.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
+              {["Gestão", "Carreira", "Tecnologia", "Negócios", "Comunicação", "Ética", "IA", "Estratégia"].map((tag) => (
+                <span key={tag} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium text-primary-foreground/80">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* A ESTRATÉGIA */}
       <section id="estrategia" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
         <div className="container">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Trophy className="h-3.5 w-3.5" /> A estratégia
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+              <Trophy className="h-3.5 w-3.5 text-accent" /> A estratégia
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
-              Quatro pilares que orientam a plataforma
+              Quatro <span className="text-accent">pilares</span> que orientam a plataforma
             </motion.h2>
           </motion.div>
 
@@ -657,11 +657,11 @@ export default function LandingPage() {
                 key={card.title}
                 variants={fadeUp}
                 custom={i}
-                className="rounded-2xl border border-border bg-card p-7 shadow-card transition-all hover:border-accent/40 hover:shadow-card-hover"
+                className="rounded-2xl border border-border bg-card p-7 shadow-card transition-all hover:border-primary/40 hover:shadow-card-hover"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-accent shadow-accent">
-                    <card.icon className="h-7 w-7 text-accent-foreground" />
+                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-primary shadow-md">
+                    <card.icon className="h-7 w-7 text-primary-foreground" />
                   </div>
                   <h3 className="font-display text-xl font-semibold text-foreground">{card.title}</h3>
                 </div>
@@ -676,11 +676,11 @@ export default function LandingPage() {
       <section id="teste-carreira" className="scroll-mt-24 py-20 md:py-24">
         <div className="container">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <ClipboardList className="h-3.5 w-3.5" /> Teste profissional
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+              <ClipboardList className="h-3.5 w-3.5 text-accent" /> Teste profissional
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
-              Teste de carreira e Índice de Perfil Profissional
+              Teste de carreira e Índice de <span className="text-accent">Perfil Profissional</span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-3 text-muted-foreground">
               Uma avaliação completa da maturidade profissional médica, com direcionamentos personalizados.
@@ -694,7 +694,7 @@ export default function LandingPage() {
               <ul className="mt-4 space-y-2">
                 {testAxes.map((axis) => (
                   <li key={axis} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle className="h-4 w-4 flex-shrink-0 text-accent" />
+                    <CheckCircle className="h-4 w-4 flex-shrink-0 text-primary" />
                     {axis}
                   </li>
                 ))}
@@ -754,7 +754,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-12 text-center">
-            <Button variant="hero" size="xl" asChild>
+            <Button variant="premium" size="xl" asChild>
               <Link to="/cadastro">
                 Fazer teste profissional
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -768,11 +768,11 @@ export default function LandingPage() {
       <section id="painel-servicos" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
         <div className="container">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-10 max-w-2xl text-center">
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Briefcase className="h-3.5 w-3.5" /> Painel de serviços
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+              <Briefcase className="h-3.5 w-3.5 text-accent" /> Painel de serviços
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
-              Tudo o que o médico precisa em um só lugar
+              Tudo o que o médico precisa em <span className="text-accent">um só lugar</span>
             </motion.h2>
           </motion.div>
 
@@ -784,8 +784,8 @@ export default function LandingPage() {
                 onClick={() => setActiveServiceCat(c.id)}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                   activeServiceCat === c.id
-                    ? "bg-accent text-accent-foreground shadow-accent"
-                    : "bg-card text-muted-foreground hover:bg-accent/10 hover:text-accent"
+                    ? "bg-primary text-primary-foreground shadow-md"
+                    : "bg-card text-muted-foreground hover:bg-primary/10 hover:text-primary"
                 }`}
               >
                 {c.title}
@@ -802,14 +802,14 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="group rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:border-accent/40 hover:shadow-card-hover"
+                className="group rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:border-primary/40 hover:shadow-card-hover"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-accent">
                   <item.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-display text-base font-semibold text-foreground">{item.title}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
-                <Link to="/cadastro" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent hover:underline">
+                <Link to="/cadastro" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
                   Saiba mais <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </motion.div>
@@ -822,11 +822,11 @@ export default function LandingPage() {
       <section id="planos" className="scroll-mt-24 py-20 md:py-24">
         <div className="container">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-12 max-w-2xl text-center">
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Star className="h-3.5 w-3.5" /> Planos
+            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+              <Star className="h-3.5 w-3.5 text-accent" /> Planos
             </motion.span>
             <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
-              Escolha o plano ideal para sua jornada
+              Escolha o <span className="text-accent">plano ideal</span> para sua jornada
             </motion.h2>
           </motion.div>
 
@@ -835,11 +835,11 @@ export default function LandingPage() {
               <div
                 key={plan.name}
                 className={`relative flex flex-col rounded-2xl border p-6 shadow-card transition-all hover:shadow-card-hover ${
-                  plan.highlight ? "border-accent bg-accent/5 shadow-accent" : "border-border bg-card"
+                  plan.highlight ? "border-primary bg-primary/5 shadow-md" : "border-border bg-card"
                 }`}
               >
                 {plan.highlight && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-accent-foreground">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
                     Mais popular
                   </span>
                 )}
@@ -851,12 +851,12 @@ export default function LandingPage() {
                 <ul className="mt-5 flex-grow space-y-2">
                   {plan.items.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-accent" />
+                      <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary" />
                       {item}
                     </li>
                   ))}
                 </ul>
-                <Button variant={plan.highlight ? "hero" : "outline"} className="mt-6 w-full" asChild>
+                <Button variant={plan.highlight ? "premium" : "outline"} className="mt-6 w-full" asChild>
                   <Link to="/planos">Ver detalhes</Link>
                 </Button>
               </div>
@@ -864,7 +864,7 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-10 text-center">
-            <Button variant="accent" size="lg" asChild>
+            <Button variant="default" size="lg" asChild>
               <Link to="/planos">
                 Comparar planos
                 <ArrowRight className="ml-2 h-4 w-4" />

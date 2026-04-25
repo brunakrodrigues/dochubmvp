@@ -81,7 +81,7 @@ export default function ScorePage() {
     };
   });
 
-  const barColors = ['hsl(var(--accent))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--info))', 'hsl(var(--destructive))', 'hsl(173 58% 50%)', 'hsl(222 47% 35%)', 'hsl(38 70% 55%)', 'hsl(160 40% 50%)'];
+  const barColors = ['hsl(var(--accent))', 'hsl(var(--success))', 'hsl(var(--warning))', 'hsl(var(--info))', 'hsl(var(--destructive))', 'hsl(27 70% 70%)', 'hsl(200 48% 25%)', 'hsl(38 70% 55%)', 'hsl(160 40% 50%)'];
 
   const userState = user?.state || 'São Paulo';
   const regionalSalary = marketData.salaryByRegion[userState] || marketData.nationalAverage;
