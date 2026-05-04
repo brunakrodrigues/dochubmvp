@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.png";
 import {
   Menu,
   X,
@@ -102,16 +103,14 @@ export function Header({ variant = "public", isAuthenticated = false }: HeaderPr
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="container flex h-20 items-center justify-between md:h-24">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary shadow-accent">
-            <span className="font-display text-xl font-bold text-primary-foreground">D</span>
-          </div>
-          <div className="flex flex-col leading-tight">
-            <span className="font-display text-xl font-bold text-foreground">DocHub</span>
-            <span className="hidden text-[10px] font-medium uppercase tracking-wider text-muted-foreground sm:block">Professional Pathways</span>
-          </div>
+        <Link to="/" className="flex items-center">
+          <img
+            src={logo}
+            alt="DocHub"
+            className="h-14 w-auto object-contain md:h-16"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -238,14 +237,8 @@ export function Footer() {
         <div className="grid gap-8 md:grid-cols-4">
           {/* Brand */}
           <div className="md:col-span-1">
-            <Link to="/" className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary shadow-accent">
-                <span className="font-display text-xl font-bold text-primary-foreground">D</span>
-              </div>
-              <div className="flex flex-col leading-tight">
-                <span className="font-display text-xl font-bold text-foreground">DocHub</span>
-                <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Professional Pathways</span>
-              </div>
+            <Link to="/" className="inline-flex items-center">
+              <img src={logo} alt="DocHub" className="h-12 w-auto object-contain" />
             </Link>
             <p className="mt-4 text-sm text-muted-foreground">
               Serviços essenciais para a carreira médica em um só lugar.

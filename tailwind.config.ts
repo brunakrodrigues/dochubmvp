@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Anton", "system-ui", "sans-serif"],
-        subtitle: ["Roboto", "system-ui", "sans-serif"],
-        body: ["Open Sans", "system-ui", "sans-serif"],
+        display: ["Outfit", "system-ui", "sans-serif"],
+        subtitle: ["Outfit", "system-ui", "sans-serif"],
+        body: ["Inter", "system-ui", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -120,8 +121,8 @@ export default {
           to: { opacity: "1", transform: "translateX(0)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 0 0 hsl(27 70% 60% / 0.4)" },
-          "50%": { boxShadow: "0 0 0 12px hsl(27 70% 60% / 0)" },
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(173 58% 39% / 0.4)" },
+          "50%": { boxShadow: "0 0 0 12px hsl(173 58% 39% / 0)" },
         },
         "float": {
           "0%, 100%": { transform: "translateY(0px)" },

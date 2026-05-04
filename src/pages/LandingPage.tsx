@@ -4,6 +4,13 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Header, Footer } from "@/components/Layout";
 import WhatsAppModal from "@/components/WhatsAppModal";
+import HeroVideoCarousel from "@/components/HeroVideoCarousel";
+import journeyImage from "@/assets/john-FlPc9_VocJ4-unsplash.jpg";
+import futureImage from "@/assets/headway-5QgIuuBxKwM-unsplash.jpg";
+import contactImage from "@/assets/contato.jpg";
+import strategyBg from "@/assets/hero-bg.jpg";
+import logo from "@/assets/logo.png";
+import logoHero from "@/assets/logo2.png";
 import {
   ArrowRight,
   CheckCircle,
@@ -313,66 +320,113 @@ export default function LandingPage() {
       <Header variant="public" />
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero py-20 md:py-28">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 h-72 w-72 rounded-full bg-accent/30 blur-3xl" />
-          <div className="absolute bottom-10 right-20 h-96 w-96 rounded-full bg-accent/20 blur-3xl" />
+      <section className="relative isolate overflow-hidden py-12 md:py-16 lg:py-20">
+        {/* Video carousel background */}
+        <HeroVideoCarousel />
+
+        {/* Floating decorative orbs */}
+        <div className="pointer-events-none absolute inset-0 z-[1]">
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.4 }}
+            className="absolute top-20 left-10 h-72 w-72 rounded-full bg-accent/30 blur-3xl"
+          />
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.7 }}
+            className="absolute bottom-10 right-20 h-96 w-96 rounded-full bg-accent/20 blur-3xl"
+          />
         </div>
+
         <div className="container relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
+            }}
             className="mx-auto max-w-4xl text-center"
           >
             {/* Big Logo in hero */}
-            <div className="mx-auto mb-8 inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-accent shadow-accent">
-                <span className="font-display text-2xl font-bold text-accent-foreground">D</span>
-              </div>
-              <div className="text-left leading-snug">
-                <span className="block font-display text-2xl font-bold text-primary-foreground">DocHub</span>
-                <span className="text-[11px] font-medium uppercase tracking-widest text-primary-foreground/60">
-                  Professional Pathways
-                </span>
-              </div>
-            </div>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 20, scale: 0.92 },
+                visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 220, damping: 22 } },
+              }}
+              className="mx-auto mb-4 inline-flex items-center justify-center md:mb-6"
+            >
+              <img
+                src={logoHero}
+                alt="DocHub"
+                className="h-40 w-auto object-contain drop-shadow-[0_12px_32px_hsl(173_58%_39%_/_0.5)] md:h-56 lg:h-64"
+              />
+            </motion.div>
 
-            <h1 className="font-display text-4xl font-bold leading-[1.35] text-primary-foreground md:text-5xl lg:text-6xl">
+            <motion.h1
+              variants={{
+                hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+                visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+              }}
+              className="font-display text-4xl font-bold leading-[1.15] tracking-tight text-primary-foreground drop-shadow-[0_2px_24px_hsl(222_47%_8%_/_0.6)] md:text-5xl lg:text-7xl"
+            >
               Serviços essenciais para a{" "}
-              <span className="text-accent">carreira médica</span> em um só lugar.
-            </h1>
-            <p className="mt-6 text-lg text-primary-foreground/75 md:text-xl">
+              <span className="bg-gradient-to-r from-accent via-accent to-emerald-300 bg-clip-text text-transparent">
+                carreira médica
+              </span>{" "}
+              em um só lugar.
+            </motion.h1>
+
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
+              }}
+              className="mx-auto mt-6 max-w-3xl text-lg text-primary-foreground/85 drop-shadow-[0_2px_16px_hsl(222_47%_8%_/_0.5)] md:text-xl"
+            >
               Uma plataforma para auxiliar médicos na estruturação da carreira de forma responsável, no
               planejamento profissional com ética e na contratação de serviços especializados com preços
               diferenciados.
-            </p>
+            </motion.p>
 
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 18 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+              }}
+              className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
+            >
               <Button variant="hero" size="xl" asChild>
                 <a href="#plataforma">
                   Conhecer a plataforma
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </a>
               </Button>
-              <Button variant="accent" size="xl" asChild>
+              <Button variant="accent" size="xl" asChild className="shadow-[0_10px_40px_-10px_hsl(173_58%_39%_/_0.7)]">
                 <Link to="/cadastro">
                   Fazer teste de carreira
                   <ClipboardCheck className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button variant="outline" size="xl" asChild className="border-white/30 bg-white/5 text-primary-foreground hover:bg-white/15">
+              <Button variant="outline" size="xl" asChild className="border-white/30 bg-white/5 text-primary-foreground backdrop-blur hover:bg-white/15">
                 <Link to="/planos">
                   Ver planos
                 </Link>
               </Button>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
+
+        {/* Bottom fade into next section */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-24 bg-gradient-to-b from-transparent to-background" />
       </section>
 
       {/* O PROPÓSITO — Editorial split layout */}
-      <section id="proposito" className="scroll-mt-24 py-20 md:py-28">
+      <section id="proposito" className="scroll-mt-24 py-14 md:py-20">
         <div className="container">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
             {/* Coluna esquerda: headline editorial */}
@@ -482,7 +536,7 @@ export default function LandingPage() {
                   custom={i}
                   className={`group relative flex flex-col overflow-hidden rounded-3xl border p-6 transition-all ${spanClass} ${
                     featured
-                      ? "border-accent/30 bg-gradient-to-br from-accent/20 via-accent/10 to-primary shadow-[0_0_40px_-12px_hsl(27_70%_60%_/_0.4)] hover:border-accent/60"
+                      ? "border-accent/30 bg-gradient-to-br from-accent/20 via-accent/10 to-primary shadow-[0_0_40px_-12px_hsl(173_58%_39%_/_0.4)] hover:border-accent/60"
                       : "border-white/10 bg-white/[0.04] backdrop-blur hover:border-accent/40 hover:bg-white/[0.07]"
                   }`}
                 >
@@ -523,18 +577,56 @@ export default function LandingPage() {
       </section>
 
       {/* A EXPERIÊNCIA */}
-      <section id="experiencia" className="scroll-mt-24 py-20 md:py-24">
+      <section id="experiencia" className="scroll-mt-24 py-14 md:py-16">
         <div className="container">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
-            <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Sparkles className="h-3.5 w-3.5" /> A experiência
-            </motion.span>
-            <motion.h2 variants={fadeUp} custom={1} className="mt-4 font-display text-3xl font-bold text-foreground md:text-4xl">
-              A jornada do médico na plataforma
-            </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="mt-3 text-muted-foreground">
-              Simples, descomplicada e conectada à rotina médica.
-            </motion.p>
+          {/* Editorial image header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto mb-14 aspect-[21/9] max-w-5xl overflow-hidden rounded-3xl shadow-card"
+          >
+            <motion.img
+              src={journeyImage}
+              alt="Médico em consulta"
+              loading="lazy"
+              initial={{ scale: 1.15 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1] }}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/85 via-primary/30 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-8 md:p-12">
+              <motion.span
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent backdrop-blur"
+              >
+                <Sparkles className="h-3.5 w-3.5" /> A experiência
+              </motion.span>
+              <motion.h2
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.55, duration: 0.7 }}
+                className="mt-3 font-display text-3xl font-bold text-primary-foreground md:text-5xl"
+              >
+                A jornada do médico na plataforma
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+                className="mt-3 max-w-2xl text-base text-primary-foreground/85 md:text-lg"
+              >
+                Simples, descomplicada e conectada à rotina médica.
+              </motion.p>
+            </div>
           </motion.div>
 
           <div className="relative mx-auto max-w-5xl">
@@ -571,9 +663,9 @@ export default function LandingPage() {
       </section>
 
       {/* A JORNADA / O CONTEXTO */}
-      <section id="jornada" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
+      <section id="jornada" className="scroll-mt-24 border-y bg-muted/40 py-14 md:py-16">
         <div className="container">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-10 max-w-2xl text-center">
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
               <Compass className="h-3.5 w-3.5" /> A jornada
             </motion.span>
@@ -614,35 +706,105 @@ export default function LandingPage() {
       </section>
 
       {/* O FUTURO */}
-      <section id="futuro" className="scroll-mt-24 py-20 md:py-24">
+      <section id="futuro" className="scroll-mt-24 py-14 md:py-16">
         <div className="container">
-          <div className="mx-auto max-w-4xl rounded-3xl bg-gradient-hero p-10 text-center shadow-xl md:p-14">
-            <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-              <Sparkles className="h-3.5 w-3.5" /> O futuro
-            </span>
-            <h2 className="mt-5 font-display text-3xl font-bold text-primary-foreground md:text-4xl">
-              A carreira médica exige preparo além da formação tradicional.
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-primary-foreground/80 md:text-lg">
-              O médico precisa atuar além da prática clínica, desenvolvendo gestão, carreira, tecnologia, negócios,
-              comunicação, ética, IA e visão estratégica. A plataforma conecta conhecimento, serviços, orientação e
-              oportunidades para apoiar médicos em uma jornada mais estratégica, segura e sustentável.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
-              {["Gestão", "Carreira", "Tecnologia", "Negócios", "Comunicação", "Ética", "IA", "Estratégia"].map((tag) => (
-                <span key={tag} className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium text-primary-foreground/80">
-                  {tag}
-                </span>
-              ))}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl shadow-xl"
+          >
+            {/* Image backdrop */}
+            <div className="absolute inset-0">
+              <motion.img
+                src={futureImage}
+                alt="Equipe colaborando"
+                loading="lazy"
+                initial={{ scale: 1.18 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1] }}
+                className="h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-hero opacity-90" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/70 via-primary/40 to-accent/30" />
             </div>
-          </div>
+
+            {/* Content */}
+            <div className="relative p-10 text-center md:p-16">
+              <motion.span
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent backdrop-blur"
+              >
+                <Sparkles className="h-3.5 w-3.5" /> O futuro
+              </motion.span>
+              <motion.h2
+                initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.45, duration: 0.8 }}
+                className="mt-5 font-display text-3xl font-bold leading-tight text-primary-foreground md:text-5xl"
+              >
+                A carreira médica exige preparo além da formação tradicional.
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.7 }}
+                className="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-primary-foreground/85 md:text-lg"
+              >
+                O médico precisa atuar além da prática clínica, desenvolvendo gestão, carreira, tecnologia, negócios,
+                comunicação, ética, IA e visão estratégica. A plataforma conecta conhecimento, serviços, orientação e
+                oportunidades para apoiar médicos em uma jornada mais estratégica, segura e sustentável.
+              </motion.p>
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.75 } },
+                }}
+                className="mt-8 flex flex-wrap items-center justify-center gap-2"
+              >
+                {["Gestão", "Carreira", "Tecnologia", "Negócios", "Comunicação", "Ética", "IA", "Estratégia"].map((tag) => (
+                  <motion.span
+                    key={tag}
+                    variants={{
+                      hidden: { opacity: 0, y: 8, scale: 0.9 },
+                      visible: { opacity: 1, y: 0, scale: 1 },
+                    }}
+                    className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-primary-foreground/90 backdrop-blur"
+                  >
+                    {tag}
+                  </motion.span>
+                ))}
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* A ESTRATÉGIA */}
-      <section id="estrategia" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
+      <section id="estrategia" className="relative isolate scroll-mt-24 overflow-hidden border-y bg-muted/40 py-14 md:py-16">
+        {/* Subtle textured backdrop */}
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <img
+            src={strategyBg}
+            alt=""
+            loading="lazy"
+            className="h-full w-full object-cover opacity-[0.08]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
+        </div>
+
         <div className="container">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-10 max-w-2xl text-center">
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
               <Trophy className="h-3.5 w-3.5 text-accent" /> A estratégia
             </motion.span>
@@ -673,9 +835,9 @@ export default function LandingPage() {
       </section>
 
       {/* TESTE DE CARREIRA */}
-      <section id="teste-carreira" className="scroll-mt-24 py-20 md:py-24">
+      <section id="teste-carreira" className="scroll-mt-24 py-14 md:py-16">
         <div className="container">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-14 max-w-2xl text-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-10 max-w-2xl text-center">
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
               <ClipboardList className="h-3.5 w-3.5 text-accent" /> Teste profissional
             </motion.span>
@@ -765,7 +927,7 @@ export default function LandingPage() {
       </section>
 
       {/* PAINEL DE SERVIÇOS */}
-      <section id="painel-servicos" className="scroll-mt-24 border-y bg-muted/40 py-20 md:py-24">
+      <section id="painel-servicos" className="scroll-mt-24 border-y bg-muted/40 py-14 md:py-16">
         <div className="container">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-10 max-w-2xl text-center">
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
@@ -819,7 +981,7 @@ export default function LandingPage() {
       </section>
 
       {/* PLANOS (preview) */}
-      <section id="planos" className="scroll-mt-24 py-20 md:py-24">
+      <section id="planos" className="scroll-mt-24 py-14 md:py-16">
         <div className="container">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="mx-auto mb-12 max-w-2xl text-center">
             <motion.span variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
@@ -875,7 +1037,20 @@ export default function LandingPage() {
       </section>
 
       {/* CONTATO */}
-      <section id="contato" className="scroll-mt-24 border-t bg-gradient-hero py-20 md:py-24">
+      <section id="contato" className="relative isolate scroll-mt-24 overflow-hidden border-t py-14 md:py-16">
+        {/* Image background */}
+        <div className="absolute inset-0 -z-10">
+          <img
+            src={contactImage}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-hero opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/80 via-primary/50 to-accent/30" />
+        </div>
+
         <div className="container">
           <div className="mx-auto max-w-3xl text-center">
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
